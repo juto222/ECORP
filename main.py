@@ -10,7 +10,9 @@ from Option import phishing
 from Option import pswd
 from Option import quizzmdp
 from Option import quizzsecurity
+from Option import si
 from Option import test_speed
+from Option import script
 
 # Initialisation de Colorama
 init(autoreset=True)
@@ -52,6 +54,7 @@ def afficher_menuFR():
     ├── [23] Générateur de fausse page HTML
     ├── [24] Keylogger (en dévoloppement)
     └── [25] Quizz sécurité
+    └── [26] Scanner de sites web (à venir)
 
 {Fore.MAGENTA}[3] 📊 Réseau
     {Fore.YELLOW}├── [31] Ping IP
@@ -60,16 +63,23 @@ def afficher_menuFR():
     ├── [34] Quizz réseau 
     └── [35] Speedtest Internet
 
-{Fore.MAGENTA}[4] ⚙️ Paramètres
-    {Fore.YELLOW}├── [41] Mode sombre / clair
-    ├── [42] Choix de langue (FR/EN)
-    └── [43] Quitter
+{Fore.MAGENTA} [4] PC
+├── [41] Informations système
+├── [42] Gestionnaire de tâches (à venir)
+├── [43] Nettoyeur de fichiers temporaires (à venir)
+├── [44] Moniteur de ressources (à venir)
+└── [45] Création de faux fichier
 
-{Fore.MAGENTA}[5] ⚖️ Aide & Légalité
-    {Fore.YELLOW}├── [51] Documentation utilisateur
-    ├── [52] FAQ
-    ├── [53] Mentions légales
-    └── [54] Informations RGPD
+{Fore.MAGENTA}[5] ⚙️ Paramètres
+    {Fore.YELLOW}├── [51] Mode sombre / clair
+    ├── [52] Choix de langue (FR/EN)
+    └── [53] Quitter
+
+{Fore.MAGENTA}[6] ⚖️ Aide & Légalité
+    {Fore.YELLOW}├── [61] Documentation utilisateur
+    ├── [62] FAQ
+    ├── [63] Mentions légales
+    └── [64] Informations RGPD
 ═══════════════════════════════════════════════════════════════════════
 {Style.RESET_ALL}""")
 
@@ -114,6 +124,13 @@ def afficher_menuEN():
     ├── [33] Logs
     ├── [34] Network Quiz
     └── [35] Internet Speedtest
+
+{Fore.MAGENTA} [4] PC
+    {Fore.YELLOW}├── [41] System Information
+    ├── [42] Task Manager (upcoming)
+    ├── [43] Temporary File Cleaner (upcoming)
+    ├── [44] Resource Monitor (upcoming)
+    └── [45] Fake File Creator
 
 {Fore.MAGENTA}[4] ⚙️ Settings
     {Fore.YELLOW}├── [41] Dark / Light Mode
@@ -221,6 +238,14 @@ while True:
 
     elif choix == 41:
         clear()
+        lancer(si.info_system, "Informations système" if langue_actuelle == "FR" else "System Information")
+
+    elif choix == 45:
+        clear()
+        lancer(script.fichier, "Création de faux fichier" if langue_actuelle == "FR" else "Fake File Creator")
+
+    elif choix == 51:
+        clear()
         if langue_actuelle == "FR":
             mode = input("Choisissez le mode (sombre/clair) : ").lower()
             if mode == "sombre":
@@ -244,7 +269,7 @@ while True:
                 print(Fore.RED + "❌ Mode not recognized.")
             input(Fore.GREEN + "\nReturn to menu...")
 
-    elif choix == 42:
+    elif choix == 52:
         clear()
         langue_actuelle = input("Choisissez votre langue (FR/EN) : ").upper()
         if langue_actuelle not in ["FR", "EN"]:
@@ -254,12 +279,12 @@ while True:
             print(Fore.GREEN + f"🌐 Langue définie sur : {langue_actuelle}")
         input(Fore.GREEN + "\nRetour au menu...")
 
-    elif choix == 43:
+    elif choix == 53:
         clear()
         print(Fore.CYAN + "👋 Fermeture du programme. À bientôt ! / Program closing. See you!")
         break
 
-    elif choix == 51:
+    elif choix == 61:
         clear()
         print(Fore.YELLOW + (
             "\n📘 Documentation utilisateur :\n- Utilisez les numéros du menu pour accéder aux outils." if langue_actuelle == "FR"
@@ -267,7 +292,7 @@ while True:
         ))
         input(Fore.GREEN + "\nRetour... / Back...")
 
-    elif choix == 52:
+    elif choix == 62:
         clear()
         print(Fore.YELLOW + (
             "\n❓ FAQ :\nQ : Est-ce légal ?\nR : Oui, pour l’apprentissage uniquement." if langue_actuelle == "FR"
@@ -275,7 +300,7 @@ while True:
         ))
         input(Fore.GREEN + "\nRetour... / Back...")
 
-    elif choix == 53:
+    elif choix == 63:
         clear()
         print(Fore.YELLOW + (
             "\n⚠️ Mentions légales :\nCe programme est fourni à titre éducatif." if langue_actuelle == "FR"
@@ -283,7 +308,7 @@ while True:
         ))
         input(Fore.GREEN + "\nRetour... / Back...")
 
-    elif choix == 54:
+    elif choix == 64:
         clear()
         print(Fore.YELLOW + (
             "\n🔒 Données personnelles :\nCe programme ne collecte aucune information." if langue_actuelle == "FR"
