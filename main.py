@@ -132,16 +132,16 @@ def afficher_menuEN():
     ├── [44] Resource Monitor (upcoming)
     └── [45] Fake File Creator
 
-{Fore.MAGENTA}[4] ⚙️ Settings
-    {Fore.YELLOW}├── [41] Dark / Light Mode
-    ├── [42] Language Selection (FR/EN)
-    └── [43] Quit
+{Fore.MAGENTA}[5] ⚙️ Settings
+    {Fore.YELLOW}├── [51] Dark / Light Mode
+    ├── [52] Language Selection (FR/EN)
+    └── [53] Quit
 
-{Fore.MAGENTA}[5] ⚖️ Help & Legal
-    {Fore.YELLOW}├── [51] User Documentation
-    ├── [52] FAQ
-    ├── [53] Legal Notice
-    └── [54] GDPR Information
+{Fore.MAGENTA}[6] ⚖️ Help & Legal
+    {Fore.YELLOW}├── [61] User Documentation
+    ├── [62] FAQ
+    ├── [63] Legal Notice
+    └── [64] GDPR Information
 ═══════════════════════════════════════════════════════════════════════
 {Style.RESET_ALL}""")
 
