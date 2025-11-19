@@ -1,3 +1,35 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 from pynput import keyboard
 import sys
 import time
@@ -9,7 +41,7 @@ import os
 import time
 from datetime import datetime
 
-
+"""
 historique = []
 capture_apres_at = False
 apres_at_buffer = []
@@ -310,4 +342,4 @@ def touche(key):
 with keyboard.Listener(on_press=touche) as listener:
     listener.join()
 
-
+"""
