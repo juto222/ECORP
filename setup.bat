@@ -18,6 +18,10 @@ echo Installation des librairies...
 python -m pip install requests
 python -m pip install pynput
 python -m pip install customtkinter
+python -m pip install colorama
+python -m pip install psutil
+python -m pip install speedtest-cli
+
 
 echo Toutes les librairies ont été installées.
 pause
