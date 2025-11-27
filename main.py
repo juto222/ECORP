@@ -6,13 +6,17 @@ from Option import CheckMDP
 from Option import GenererMDP
 from Option import phishing
 #from Option import Scan
-#from Option import keylog
+from Option import keylog
 from Option import pswd
 from Option import quizzmdp
 from Option import quizzsecurity
+from Option import username
 from Option import si
 from Option import test_speed
 from Option import script
+from Option import subdomain
+from Option import iplookup
+from Option import dirbuster
 
 # Initialisation de Colorama
 init(autoreset=True)
@@ -52,34 +56,39 @@ def afficher_menuFR():
     {Fore.YELLOW}├── [21] Virus (désactivé pour des raisons éthiques)
     ├── [22] Outil DDoS (désactivé pour des raisons éthiques)
     ├── [23] Générateur de fausse page HTML
-    ├── [24] Keylogger (en dévoloppement)
-    └── [25] Quizz sécurité
-    └── [26] Scanner de sites web (à venir)
+    ├── [24] Keylogger (pas toutes les options développés)
+    ├── [25] Quizz sécurité
+    ├── [26] Scanner de sites web
+    └── [27] DirBuster
 
 {Fore.MAGENTA}[3] 📊 Réseau
     {Fore.YELLOW}├── [31] Ping IP
-    ├── [32] Scan Réseau (à venir)
+    ├── [32] Scan Réseau 
     ├── [33] Journal / Logs
-    ├── [34] Quizz réseau 
-    └── [35] Speedtest Internet
+    ├── [34] Quizz réseau (en développement)
+    ├── [35] Info sur l'IP
+    └── [36] Speedtest Internet
 
 {Fore.MAGENTA} [4] PC
-├── [41] Informations système
-├── [42] Gestionnaire de tâches (à venir)
-├── [43] Nettoyeur de fichiers temporaires (à venir)
-├── [44] Moniteur de ressources (à venir)
-└── [45] Création de faux fichier
+    {Fore.YELLOW}├── [41] Informations système
+    ├── [42] Gestionnaire de tâches (à venir)
+    ├── [43] Nettoyeur de fichiers temporaires (à venir)
+    ├── [44] Moniteur de ressources (à venir)
+    └── [45] Création de faux fichier
+
+{Fore.MAGENTA} [5] Autres
+    {Fore.YELLOW}├── [51] Recherche d'utilisateur
 
 {Fore.MAGENTA}[5] ⚙️ Paramètres
-    {Fore.YELLOW}├── [51] Mode sombre / clair
-    ├── [52] Choix de langue (FR/EN)
-    └── [53] Quitter
+    {Fore.YELLOW}├── [61] Mode sombre / clair
+    ├── [62] Choix de langue (FR/EN)
+    └── [63] Quitter
 
-{Fore.MAGENTA}[6] ⚖️ Aide & Légalité
-    {Fore.YELLOW}├── [61] Documentation utilisateur
-    ├── [62] FAQ
-    ├── [63] Mentions légales
-    └── [64] Informations RGPD
+{Fore.MAGENTA}[7] ⚖️ Aide & Légalité
+    {Fore.YELLOW}├── [71] Documentation utilisateur
+    ├── [72] FAQ
+    ├── [73] Mentions légales
+    └── [74] Informations RGPD
 ═══════════════════════════════════════════════════════════════════════
 {Style.RESET_ALL}""")
 
@@ -115,33 +124,38 @@ def afficher_menuEN():
     {Fore.YELLOW}├── [21] Virus (disabled for ethical reasons)
     ├── [22] DDoS Tool (disabled for ethical reasons)
     ├── [23] Fake HTML Page Generator
-    ├── [24] Keylogger (in development)
-    └── [25] Security Quiz
+    ├── [24] Keylogger (not all option are developped)
+    ├── [25] Security Quiz
+    ├── [26] Scanner de sites web
+    └── [27] DirBuster
 
 {Fore.MAGENTA}[3] 📊 Network
     {Fore.YELLOW}├── [31] Ping IP
-    ├── [32] Scan Network (upcoming)
+    ├── [32] Scan Network 
     ├── [33] Logs
-    ├── [34] Network Quiz
-    └── [35] Internet Speedtest
+    ├── [34] Network Quiz (in development)
+    ├── [35] IP Lookup
+    └── [36] Internet Speedtest
 
-{Fore.MAGENTA} [4] PC
+{Fore.MAGENTA} [4]    PC
     {Fore.YELLOW}├── [41] System Information
     ├── [42] Task Manager (upcoming)
     ├── [43] Temporary File Cleaner (upcoming)
-    ├── [44] Resource Monitor (upcoming)
     └── [45] Fake File Creator
 
-{Fore.MAGENTA}[5] ⚙️ Settings
-    {Fore.YELLOW}├── [51] Dark / Light Mode
-    ├── [52] Language Selection (FR/EN)
-    └── [53] Quit
+{Fore.MAGENTA} [5] Others
+    {Fore.YELLOW}├── [51] Username Lookup
 
-{Fore.MAGENTA}[6] ⚖️ Help & Legal
-    {Fore.YELLOW}├── [61] User Documentation
-    ├── [62] FAQ
-    ├── [63] Legal Notice
-    └── [64] GDPR Information
+{Fore.MAGENTA}[6] ⚙️ Settings
+    {Fore.YELLOW}├── [61] Dark / Light Mode
+    ├── [62] Language Selection (FR/EN)
+    └── [63] Quit
+
+{Fore.MAGENTA}[7] ⚖️ Help & Legal
+    {Fore.YELLOW}├── [71] User Documentation
+    ├── [72] FAQ
+    ├── [73] Legal Notice
+    └── [74] GDPR Information
 ═══════════════════════════════════════════════════════════════════════
 {Style.RESET_ALL}""")
 
@@ -203,9 +217,9 @@ while True:
         lancer(lambda: phishing.afficher_menu_phishing(langue_actuelle),
        "Générateur de fausse page HTML" if langue_actuelle == "FR" else "Fake HTML Page Generator")
         
-    #elif choix == 24:
-    #    clear()
-    #    lancer(keylog.keylog, "Keylogger" if langue_actuelle == "FR" else "Keylogger")
+    elif choix == 24:
+        clear()
+        lancer(keylog.keylog, "Keylogger" if langue_actuelle == "FR" else "Keylogger")
 
     elif choix == 25:
         clear()
@@ -215,15 +229,23 @@ while True:
             level = input("Choose difficulty level (1-Easy, 2-Medium, 3-Hard): ")
         lancer(lambda: quizzsecurity.quizzsecurity(level), "Quizz sécurité" if langue_actuelle == "FR" else "Security Quiz")
 
+    elif choix == 26:
+        clear()
+        lancer(subdomain.sousdomaine, "Sous domaine" if langue_actuelle == "FR" else "Subdomain")
+
+    elif choix == 27:
+        clear()
+        lancer(dirbuster.dirbuster, "Dirbuster")
+
 
 
     elif choix == 31:
         lancer(PingIP.ping, "Ping IP" if langue_actuelle == "FR" else "Ping IP")
 
     #elif choix == 32:
-    #    clear()
-    #    lancer(Scan.scan, "Scan Réseau" if langue_actuelle == "FR" else "Network Scan")
-    #    input(Fore.GREEN + "\nRetour... / Back...")
+    #   clear()
+     #   lancer(Scan.scan, "Scan Réseau" if langue_actuelle == "FR" else "Network Scan")
+      #  input(Fore.GREEN + "\nRetour... / Back...")
     
     elif choix == 33: 
         clear()
@@ -232,7 +254,11 @@ while True:
             print(Fore.YELLOW + logs)
             input(Fore.GREEN + "\nRetour... / Back...")
 
-    elif choix == 34:
+    elif choix == 35:
+        clear()
+        lancer(iplookup.obtenir_infos_ip, "Info sur l'IP" if langue_actuelle == "FR" else "IP Lookup")
+
+    elif choix == 36:
         clear()
         lancer(test_speed.test_speed, "Speedtest Internet" if langue_actuelle == "FR" else "Internet Speedtest")
 
@@ -245,6 +271,10 @@ while True:
         lancer(script.fichier, "Création de faux fichier" if langue_actuelle == "FR" else "Fake File Creator")
 
     elif choix == 51:
+        clear()
+        lancer(username.username, "Recherche d'utilisateur" if langue_actuelle == "FR" else "Username Lookup")
+
+    elif choix == 61:
         clear()
         if langue_actuelle == "FR":
             mode = input("Choisissez le mode (sombre/clair) : ").lower()
@@ -269,7 +299,7 @@ while True:
                 print(Fore.RED + "❌ Mode not recognized.")
             input(Fore.GREEN + "\nReturn to menu...")
 
-    elif choix == 52:
+    elif choix == 62:
         clear()
         langue_actuelle = input("Choisissez votre langue (FR/EN) : ").upper()
         if langue_actuelle not in ["FR", "EN"]:
@@ -279,12 +309,12 @@ while True:
             print(Fore.GREEN + f"🌐 Langue définie sur : {langue_actuelle}")
         input(Fore.GREEN + "\nRetour au menu...")
 
-    elif choix == 53:
+    elif choix == 63:
         clear()
         print(Fore.CYAN + "👋 Fermeture du programme. À bientôt ! / Program closing. See you!")
         break
 
-    elif choix == 61:
+    elif choix == 71:
         clear()
         print(Fore.YELLOW + (
             "\n📘 Documentation utilisateur :\n- Utilisez les numéros du menu pour accéder aux outils." if langue_actuelle == "FR"
@@ -292,7 +322,7 @@ while True:
         ))
         input(Fore.GREEN + "\nRetour... / Back...")
 
-    elif choix == 62:
+    elif choix == 72:
         clear()
         print(Fore.YELLOW + (
             "\n❓ FAQ :\nQ : Est-ce légal ?\nR : Oui, pour l’apprentissage uniquement." if langue_actuelle == "FR"
@@ -300,7 +330,7 @@ while True:
         ))
         input(Fore.GREEN + "\nRetour... / Back...")
 
-    elif choix == 63:
+    elif choix == 73:
         clear()
         print(Fore.YELLOW + (
             "\n⚠️ Mentions légales :\nCe programme est fourni à titre éducatif." if langue_actuelle == "FR"
@@ -308,7 +338,7 @@ while True:
         ))
         input(Fore.GREEN + "\nRetour... / Back...")
 
-    elif choix == 64:
+    elif choix == 74:
         clear()
         print(Fore.YELLOW + (
             "\n🔒 Données personnelles :\nCe programme ne collecte aucune information." if langue_actuelle == "FR"
