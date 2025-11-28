@@ -219,7 +219,7 @@ while True:
         
     elif choix == 24:
         clear()
-        lancer(keylog.keylog, "Keylogger" if langue_actuelle == "FR" else "Keylogger")
+        lancer(keylog.key, "Keylogger" if langue_actuelle == "FR" else "Keylogger")
 
     elif choix == 25:
         clear()
@@ -349,3 +349,4 @@ while True:
     else:
         print(Fore.RED + "❌ Option invalide.")
         time.sleep(1.5)
+
