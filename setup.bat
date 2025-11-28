@@ -17,7 +17,7 @@ py -3.11 -m pip install psutil
 py -3.11 -m pip install speedtest-cli
 py -3.11 -m pip install cx-Freeze
 py -3.11 -m pip install clipboard
-py -3.11 -m pip install PIL
+py -3.11 -m pip install Pillow
 py -3.11 -m pip install shutil
 py -3.11 -m pip install tkinter
 py -3.11 -m pip install psutil
@@ -28,3 +28,4 @@ py -3.11 -m pip install dnspython
 
 echo Toutes les librairies ont été installées.
 pause
+
