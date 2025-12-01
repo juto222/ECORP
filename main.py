@@ -53,7 +53,7 @@ def afficher_menuFR():
     └── [14] Mot de passe compromis
 
 {Fore.MAGENTA}[2] 🛡 Pentest
-    {Fore.YELLOW}├── [21] Virus (désactivé pour des raisons éthiques)
+    {Fore.YELLOW}├── [21] Botnet (en développement)
     ├── [22] Outil DDoS (désactivé pour des raisons éthiques)
     ├── [23] Générateur de fausse page HTML
     ├── [24] Keylogger (pas toutes les options développés)
@@ -121,7 +121,7 @@ def afficher_menuEN():
     └── [14] Compromised Passwords
 
 {Fore.MAGENTA}[2] 🛡 Pentest
-    {Fore.YELLOW}├── [21] Virus (disabled for ethical reasons)
+    {Fore.YELLOW}├── [21] Botnet (in development)
     ├── [22] DDoS Tool (disabled for ethical reasons)
     ├── [23] Fake HTML Page Generator
     ├── [24] Keylogger (not all option are developped)
@@ -349,4 +349,5 @@ while True:
     else:
         print(Fore.RED + "❌ Option invalide.")
         time.sleep(1.5)
+
 
