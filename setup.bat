@@ -23,6 +23,8 @@ py -3.11 -m pip install tkinter
 py -3.11 -m pip install psutil
 py -3.11 -m pip install getpass
 py -3.11 -m pip install dnspython
+py -3.11 -m pip install bs4
+py -3.11 -m pip install aiohttp
 
 
 
