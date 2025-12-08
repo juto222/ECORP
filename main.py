@@ -80,7 +80,7 @@ def afficher_menuFR():
 
 {Fore.MAGENTA} [5] Autres
     {Fore.YELLOW}├── [51] Recherche d'utilisateur
-    ├── [52] Fail2ban Windows
+    └── [52] Fail2ban Windows
     
 
 {Fore.MAGENTA}[5] ⚙️ Paramètres
@@ -356,4 +356,5 @@ while True:
     else:
         print(Fore.RED + "❌ Option invalide.")
         time.sleep(1.5)
+
 
