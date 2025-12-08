@@ -65,7 +65,7 @@ def afficher_menuFR():
     {Fore.YELLOW}├── [31] Ping IP
     ├── [32] Scan Réseau 
     ├── [33] Journal / Logs
-    ├── [34] Quizz réseau (en développement)
+    ├── [34] Quizz réseau
     ├── [35] Info sur l'IP
     └── [36] Speedtest Internet
 
@@ -132,7 +132,7 @@ def afficher_menuEN():
     {Fore.YELLOW}├── [31] Ping IP
     ├── [32] Scan Network 
     ├── [33] Logs
-    ├── [34] Network Quiz (in development)
+    ├── [34] Network Quiz
     ├── [35] IP Lookup
     └── [36] Internet Speedtest
 
@@ -348,5 +348,6 @@ while True:
     else:
         print(Fore.RED + "❌ Option invalide.")
         time.sleep(1.5)
+
 
 
