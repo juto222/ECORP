@@ -6,6 +6,7 @@ from Option import CheckMDP
 from Option import GenererMDP
 from Option import phishing
 #from Option import Scan
+from Option import quizznetwork
 from Option import keylog
 from Option import pswd
 from Option import quizzmdp
@@ -56,10 +57,11 @@ def afficher_menuFR():
     {Fore.YELLOW}├── [21] Virus (désactivé pour des raisons éthiques)
     ├── [22] Outil DDoS (désactivé pour des raisons éthiques)
     ├── [23] Générateur de fausse page HTML
-    ├── [24] Keylogger
+    ├── [24] Keylogger (pas toutes les options développés)
     ├── [25] Quizz sécurité
     ├── [26] Scanner de sites web
     └── [27] DirBuster
+    
 
 {Fore.MAGENTA}[3] 📊 Réseau
     {Fore.YELLOW}├── [31] Ping IP
@@ -78,6 +80,8 @@ def afficher_menuFR():
 
 {Fore.MAGENTA} [5] Autres
     {Fore.YELLOW}├── [51] Recherche d'utilisateur
+    ├── [52] Fail2ban Windows
+    
 
 {Fore.MAGENTA}[5] ⚙️ Paramètres
     {Fore.YELLOW}├── [61] Mode sombre / clair
@@ -252,6 +256,10 @@ while True:
             logs = f.read()
             print(Fore.YELLOW + logs)
             input(Fore.GREEN + "\nRetour... / Back...")
+        
+    elif choix == 34:
+        clear()
+        lancer(quizznetwork.quizznetwork, "Quizz réseau" if langue_actuelle == "FR" else "Network Quiz")
 
     elif choix == 35:
         clear()
@@ -348,6 +356,4 @@ while True:
     else:
         print(Fore.RED + "❌ Option invalide.")
         time.sleep(1.5)
-
-
 
