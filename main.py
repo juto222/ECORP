@@ -56,7 +56,7 @@ def afficher_menuFR():
     {Fore.YELLOW}├── [21] Virus (désactivé pour des raisons éthiques)
     ├── [22] Outil DDoS (désactivé pour des raisons éthiques)
     ├── [23] Générateur de fausse page HTML
-    ├── [24] Keylogger (pas toutes les options développés)
+    ├── [24] Keylogger
     ├── [25] Quizz sécurité
     ├── [26] Scanner de sites web
     └── [27] DirBuster
@@ -123,7 +123,7 @@ def afficher_menuEN():
     {Fore.YELLOW}├── [21] Virus (disabled for ethical reasons)
     ├── [22] DDoS Tool (disabled for ethical reasons)
     ├── [23] Fake HTML Page Generator
-    ├── [24] Keylogger (not all option are developped)
+    ├── [24] Keylogger
     ├── [25] Security Quiz
     ├── [26] Website Scanner
     └── [27] DirBuster
@@ -348,4 +348,5 @@ while True:
     else:
         print(Fore.RED + "❌ Option invalide.")
         time.sleep(1.5)
+
 
