@@ -299,10 +299,26 @@ def pyarmor():
     os.system(f"pyarmor gen {temp_script}")
 
 def nuitka():
-    global nom_fichier, temp_script    
-    os.system("pip install nuitka")
-    os.system(f'nuitka --onefile --windows-disable-console --output-dir=. {temp_script}')
+    global nom_fichier, temp_script   
+    print(f"""
+    {Fore.LIGHTRED_EX}
+    Pré-requis pour Nuitka :
+    {Style.RESET_ALL}
+    - Avoir un compilateur C installé : https://visualstudio.microsoft.com/fr/visual-cpp-build-tools/ (Visual Studio pour Windows)
+    - A l'installation, cochez : 
+        - "Desktop development with C++"
+        - "MSVC v142 - VS 2019 C++ x64/x86 build tools" (après avoir coché "Desktop development with C++")
+        - "Windows 10/11 SDK" (après avoir coché "Desktop development with C++")
+        Ca devrait faire environ 9Go d'installation.
 
+    - Redémarrez votre ordinateur après l'installation des outils de build.
+
+    et vous pouvez lancer !
+
+    """) 
+    input("Lisez et appuyez sur Entrée pour continuer...\n\n")
+    os.system("pip install nuitka\n\n")
+    os.system(f'\n\nnuitka --msvc=latest --onefile --windows-disable-console --output-dir=. --show-progress {temp_script}')
 
 
 # ---------------- BUILDER ----------------
@@ -781,3 +797,5 @@ with open("logs.txt", "a") as fichier:
 
 def key():
     app.mainloop()
+
+key()
