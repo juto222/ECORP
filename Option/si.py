@@ -1,4 +1,4 @@
-import os
+
 from colorama import Fore, Style  
 import platform 
 import socket
@@ -50,3 +50,15 @@ def info_system():
         print(interface)
         for addr in addrs:
             print(f" {Fore.GREEN} {addr.family} - {addr.address} \n")
+
+    import time 
+
+    with open("logs.txt", "a") as fichier:
+        fichier.write(
+            f"------------------------------------\n"
+            f"\n"
+            f" [{time.strftime('%d-%m-%Y %H:%M:%S')}]     Recherche des Informations Systeme     \n"
+            f"\n"
+            f"------------------------------------\n"
+            f"\n"
+        )
