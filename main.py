@@ -25,7 +25,7 @@ init(autoreset=True)
 
 # Efface le terminal
 def clear():
-    os.system('cls' if os.name == 'nt' else 'clear')
+    os.system('cls')
 
 # Affiche le menu principal en FR
 def afficher_menuFR():
@@ -364,4 +364,3 @@ while True:
     else:
         print(Fore.RED + "❌ Option invalide.")
         time.sleep(1.5)
-
