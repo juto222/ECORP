@@ -5,6 +5,7 @@ from Option import PingIP
 from Option import CheckMDP
 from Option import GenererMDP
 from Option import phishing
+from Option import crypt
 #from Option import Scan
 from Option import quizznetwork
 from Option import keylog
@@ -80,7 +81,8 @@ def afficher_menuFR():
 
 {Fore.MAGENTA} [5] Autres
     {Fore.YELLOW}├── [51] Recherche d'utilisateur
-    └── [52] Fail2ban Windows
+    ├── [52] Fail2ban Windows (en développement)
+    └── [53] Chiffrage de fichier python
     
 
 {Fore.MAGENTA}[5] ⚙️ Paramètres
@@ -148,6 +150,8 @@ def afficher_menuEN():
 
 {Fore.MAGENTA} [5] Others
     {Fore.YELLOW}├── [51] Username Lookup
+    ├── [52] Fail2ban Windows (in development)
+    └── [53] Python File Encryption
 
 {Fore.MAGENTA}[6] ⚙️ Settings
     {Fore.YELLOW}├── [61] Dark / Light Mode
@@ -222,7 +226,7 @@ while True:
         
     elif choix == 24:
         clear()
-        lancer(keylog.keylog, "Keylogger" if langue_actuelle == "FR" else "Keylogger")
+        lancer(keylog.key, "Keylogger" if langue_actuelle == "FR" else "Keylogger")
 
     elif choix == 25:
         clear()
@@ -280,6 +284,10 @@ while True:
     elif choix == 51:
         clear()
         lancer(username.username, "Recherche d'utilisateur" if langue_actuelle == "FR" else "Username Lookup")
+
+    elif choix == 53:
+        clear()
+        lancer(crypt.crypt, "Chiffrage de fichier python" if langue_actuelle == "FR" else "Python File Encryption")
 
     elif choix == 61:
         clear()
@@ -356,5 +364,4 @@ while True:
     else:
         print(Fore.RED + "❌ Option invalide.")
         time.sleep(1.5)
-
 
