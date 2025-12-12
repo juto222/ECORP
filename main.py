@@ -225,10 +225,14 @@ while True:
             level = input("Choose difficulty level (1-Easy, 2-Medium, 3-Hard): ")
         lancer(lambda: quizzmdp.quizz_mdp(level), "Quizz mot de passe" if langue_actuelle == "FR" else "Password Quiz")
 
-    elif choix == 21 or choix == 22:
+    elif choix == 21:
         clear()
         print(Fore.RED + "❌ Fonction désactivée. / Feature disabled.")
         input(Fore.GREEN + "\nRetour... / Back...")
+
+    elif choix == 22:
+            clear()
+            lancer(dirbuster.dirbuster, "Dirbuster" if langue_actuelle == "FR" else "Dirbuster")
 
     elif choix == 23:
         clear()
@@ -251,9 +255,7 @@ while True:
         clear()
         lancer(subdomain.sousdomaine, "Sous domaine" if langue_actuelle == "FR" else "Subdomain")
 
-    elif choix == 27:
-        clear()
-        lancer(dirbuster.dirbuster, "Dirbuster")
+    
 
 
 
@@ -379,4 +381,3 @@ while True:
     else:
         print(Fore.RED + "❌ Option invalide.")
         time.sleep(1.5)
-
