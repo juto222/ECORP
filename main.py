@@ -1,5 +1,6 @@
 import os
 import time
+import webbrowser
 from colorama import init, Fore, Style
 from Option import PingIP
 from Option import CheckMDP
@@ -48,6 +49,11 @@ def afficher_menuFR():
 
 {Fore.CYAN}═══════════════════════════════════════════════════════════════════════
 
+{Fore.GREEN}
+            Allez voir notre Gestionnaire de mot de passe !!!!
+            http://linganguliguli.worldlite.fr/
+
+
 {Fore.MAGENTA}[1] 🔐 Mot de passe
     {Fore.YELLOW}├── [11] Générateur de mot de passe
     ├── [12] Vérificateur de mot de passe
@@ -55,14 +61,13 @@ def afficher_menuFR():
     └── [14] Mot de passe compromis
 
 {Fore.MAGENTA}[2] 🛡 Pentest
-    {Fore.YELLOW}├── [21] Virus (désactivé pour des raisons éthiques)
-    ├── [22] Outil DDoS (désactivé pour des raisons éthiques)
+    {Fore.YELLOW}├── [21]  
+    ├── [22] DirBuster
     ├── [23] Générateur de fausse page HTML
-    ├── [24] Keylogger (pas toutes les options développés)
+    ├── [24] Keylogger
     ├── [25] Quizz sécurité
-    ├── [26] Scanner de sites web
-    └── [27] DirBuster
-    
+    └── [26] Scanner de sites web
+
 
 {Fore.MAGENTA}[3] 📊 Réseau
     {Fore.YELLOW}├── [31] Ping IP
@@ -81,7 +86,7 @@ def afficher_menuFR():
 
 {Fore.MAGENTA} [5] Autres
     {Fore.YELLOW}├── [51] Recherche d'utilisateur
-    ├── [52] Fail2ban Windows (en développement)
+    ├── [52] Gestionnaire de mot de passe
     └── [53] Chiffrage de fichier python
     
 
@@ -119,6 +124,12 @@ def afficher_menuEN():
 
 {Fore.CYAN}═══════════════════════════════════════════════════════════════════════
 
+
+{Fore.GREEN}
+            Check out our Password Manager !!!!
+            http://linganguliguli.worldlite.fr/
+
+
 {Fore.MAGENTA}[1] 🔐 Password
     {Fore.YELLOW}├── [11] Password Generator
     ├── [12] Password Checker
@@ -150,7 +161,7 @@ def afficher_menuEN():
 
 {Fore.MAGENTA} [5] Others
     {Fore.YELLOW}├── [51] Username Lookup
-    ├── [52] Fail2ban Windows (in development)
+    ├── [52] Password Manager
     └── [53] Python File Encryption
 
 {Fore.MAGENTA}[6] ⚙️ Settings
@@ -285,6 +296,10 @@ while True:
         clear()
         lancer(username.username, "Recherche d'utilisateur" if langue_actuelle == "FR" else "Username Lookup")
 
+    elif choix == 52:
+        clear()
+        webbrowser.open("http://linganguliguli.worldlite.fr/")
+
     elif choix == 53:
         clear()
         lancer(crypt.crypt, "Chiffrage de fichier python" if langue_actuelle == "FR" else "Python File Encryption")
@@ -364,3 +379,4 @@ while True:
     else:
         print(Fore.RED + "❌ Option invalide.")
         time.sleep(1.5)
+
