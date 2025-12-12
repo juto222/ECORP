@@ -5,7 +5,7 @@ python -m pip install --upgrade pip
 
 REM Installer les librairies nécessaires
 echo Installation des librairies...
-py -3.11 -m pip install --upgrade requests pynput customtkinter colorama psutil speedtest-cli cx_Freeze clipboard Pillow dnspython bs4 aiohttp
+py -3.11 -m pip install --upgrade webbrowser requests pynput customtkinter colorama psutil speedtest-cli cx_Freeze clipboard Pillow dnspython bs4 aiohttp
 
 echo Toutes les librairies ont été installées.
 pause
