@@ -81,13 +81,15 @@ def afficher_menuFR():
     {Fore.YELLOW}├── [41] Informations système
     ├── [42] Gestionnaire de tâches (à venir)
     ├── [43] Nettoyeur de fichiers temporaires (à venir)
-    ├── [44] Moniteur de ressources (à venir)
+    ├── [44] Mot de passe stocké (à venir)
     └── [45] Création de faux fichier
 
 {Fore.MAGENTA} [5] Autres
     {Fore.YELLOW}├── [51] Recherche d'utilisateur
     ├── [52] Gestionnaire de mot de passe
-    └── [53] Chiffrage de fichier python
+    ├── [53] Chiffrage de fichier python
+    ├── [54] Déchiffrage de fichier python
+    └── [55] Console
     
 
 {Fore.MAGENTA}[5] ⚙️ Paramètres
@@ -162,7 +164,9 @@ def afficher_menuEN():
 {Fore.MAGENTA} [5] Others
     {Fore.YELLOW}├── [51] Username Lookup
     ├── [52] Password Manager
-    └── [53] Python File Encryption
+    ├── [53] Python File Encryption
+    ├── [54] Python File Decryption
+    └── [55] Console
 
 {Fore.MAGENTA}[6] ⚙️ Settings
     {Fore.YELLOW}├── [61] Dark / Light Mode
