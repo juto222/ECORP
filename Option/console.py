@@ -5,6 +5,34 @@ def console():
     def clear():
         os.system('cls')
 
+    input(f"""{Fore.CYAN}Cette console interactive vous permet de configurer et d'exécuter divers modules payload, capture et scan.
+          
+Vous allez configurer les modules souhaités étape par étape.
+A la fin de chaque configuration, le module sera créer dans un fichier prêt à être exécuté dès l'ouverture.
+
+          {Fore.YELLOW}Vous pouvez taper 'back' à tout moment pour revenir au menu précédent.
+
+          Vous pouvez taper 'exit' ou 'quit' pour quitter la console interactive.
+
+          Vous pouvez taper 'help' pour afficher de l'aide à tout moment.{Style.RESET_ALL}
+
+Appuyez sur Entrée pour continuer...
+          """)
+    
+    def help():
+        clear()
+        print(f"""{Fore.CYAN}=== Aide Console Interactive ==={Style.RESET_ALL}
+{Fore.YELLOW}Commandes disponibles :{Style.RESET_ALL}
+- payload : Accéder aux modules payload.
+- capture : Accéder aux modules de capture.
+- scan : Accéder aux modules de scan.
+- back : Revenir au menu précédent.
+- exit / quit : Quitter la console interactive.
+- help : Afficher cette aide.
+        """)
+        input("Appuyez sur Entrée pour revenir à la console...")
+    clear()
+
     payloads = [
         "Clipboard",
         "Screenshot",
@@ -43,9 +71,15 @@ def console():
     import time
     global tps
     print(Fore.CYAN + "\n=== Console Interactive ===\n")
-    print(Fore.YELLOW + "Entrez 'payload' ou 'capture' ou 'scan' pour accéder aux modules correspondants.")
+    print(Fore.YELLOW + "Entrez 'payload' ou 'capture' ou 'scan' pour accéder aux modules correspondants. 'help' pour l'aide." + Style.RESET_ALL)
     while True:
         cmd = input(Fore.GREEN + ">> " + Style.RESET_ALL)
+        if cmd.lower() == "help":
+            help()
+            clear()
+            print(Fore.CYAN + "\n=== Console Interactive ===\n")
+            print(Fore.YELLOW + "Entrez 'payload' ou 'capture' ou 'scan' pour accéder aux modules correspondants.")
+            continue
         if cmd.lower() == "payload":
             clear()
             print(f"""{Fore.CYAN}=== Modules Payload ==={Style.RESET_ALL}
