@@ -72,7 +72,7 @@ def afficher_menuFR():
 
 {Fore.MAGENTA}[3] 📊 Réseau                                                           {Fore.MAGENTA}[7] ⚖️ Aide & Légalité
     {Fore.YELLOW}├── [31] Ping IP                                                     ├── [71] Documentation utilisateur
-    ├── [32] Scan Réseau                                                 ├── [72] FAQ
+    ├── [32] Scan Réseau (en développement)                              ├── [72] FAQ
     ├── [33] Journal / Logs                                              ├── [73] Mentions légales
     ├── [34] Quizz réseau                                                └── [74] Informations RGPD
     ├── [35] Info sur l'IP
@@ -132,7 +132,7 @@ def afficher_menuEN():
 
 {Fore.MAGENTA}[3] 📊 Network                                                           {Fore.MAGENTA}[7] ⚖️ Help & Legal
     {Fore.YELLOW}├── [31] Ping IP                                                     ├── [71] User Documentation
-    ├── [32] Scan Network                                                ├── [72] FAQ
+    ├── [32] Scan Network (in development)                               ├── [72] FAQ
     ├── [33] Logs                                                        ├── [73] Legal Notice
     ├── [34] Network Quiz                                                └── [74] GDPR Information
     ├── [35] IP Lookup
