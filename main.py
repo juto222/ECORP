@@ -10,7 +10,7 @@ from Option import crypt
 #from Option import Scan
 from Option import quizznetwork
 from Option import keylog
-from Option import console
+#from Option import console
 from Option import pswd
 from Option import quizzmdp
 from Option import quizzsecurity
@@ -33,50 +33,51 @@ def clear():
 def afficher_menuFR():
     clear()
     print(f"""{Fore.CYAN}{Style.BRIGHT}
-═══════════════════════════════════════════════════════════════════════
+                                 ═══════════════════════════════════════════════════════════════════════
+                                 {Fore.GREEN}
+                                              @                                                                                                                  
+                                           @@@@@@                                                                                                               
+                                         @@@@@@@                                                                                                                
+                                      @@@@@@@@   @@                @@@@           @@@@@       @@@@@@@@@@     @@@@@@@@                                                         
+                                   @@@@@@@@   @@@@@@@           @@@@@@@@@@@    @@@@   @@@@    @@@    @@@   @@@    @@@                                            
+                                   @@@@@@@@@@@@@@@@            @@@            @@@       @@@   @@@    @@@   @@@    @@@                                           
+                                     @@@@@@@@@@@@   @@@@@      @@@           @@@         @@@  @@@@@@@@@    @@@@@@@@@                                            
+                                       @@@@@@@@   @@@@@@@@     @@@            @@@       @@@   @@@   @@@    @@@                                                  
+                                        @@@@@@@@@@@@@@@         @@@@@@@@@@@    @@@@   @@@@    @@@    @@@   @@@                                                  
+                                          @@@@@@@@@@                @@@@          @@@@@       @@@    @@@@  @@@                                                 
+                                            @@@@@@                                                                                                               
+                                             @@               @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@        
+                                 {Fore.CYAN}═══════════════════════════════════════════════════════════════════════
+
 {Fore.GREEN}
-             @                                                                                                                  
-          @@@@@@                                                                                                                
-        @@@@@@@                                                                                                                 
-     @@@@@@@@   @@                @@@@           @@@@@       @@@@@@@@@@     @@@@@@@@                                                          
-  @@@@@@@@   @@@@@@@           @@@@@@@@@@@    @@@@   @@@@    @@@    @@@   @@@    @@@                                             
-  @@@@@@@@@@@@@@@@            @@@            @@@       @@@   @@@    @@@   @@@    @@@                                            
-    @@@@@@@@@@@@   @@@@@      @@@           @@@         @@@  @@@@@@@@@    @@@@@@@@@                                             
-      @@@@@@@@   @@@@@@@@     @@@            @@@       @@@   @@@   @@@    @@@                                                   
-       @@@@@@@@@@@@@@@         @@@@@@@@@@@    @@@@   @@@@    @@@    @@@   @@@                                                   
-         @@@@@@@@@@                @@@@          @@@@@       @@@    @@@@  @@@                                                   
-           @@@@@@                                                                                                               
-            @@               @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@        
-
-{Fore.CYAN}═══════════════════════════════════════════════════════════════════════
-
-{Fore.GREEN}
-            Allez voir notre Gestionnaire de mot de passe !!!!
-            http://linganguliguli.worldlite.fr/
+                                                    Allez voir notre Gestionnaire de mot de passe !!!!
+                                                    http://linganguliguli.worldlite.fr/
 
 
-{Fore.MAGENTA}[1] 🔐 Mot de passe
-    {Fore.YELLOW}├── [11] Générateur de mot de passe
-    ├── [12] Vérificateur de mot de passe
-    ├── [13] Quizz mot de passe
-    └── [14] Mot de passe compromis
+{Fore.MAGENTA}[1] 🔐 Mot de passe                                                     {Fore.MAGENTA}[5] 🧩 Autres
+    {Fore.YELLOW}├── [11] Générateur de mot de passe                                  ├── [51] Recherche d'utilisateur
+    ├── [12] Vérificateur de mot de passe                                ├── [52] Gestionnaire de mot de passe
+    ├── [13] Quizz mot de passe                                          ├── [53] Chiffrage de fichier python
+    └── [14] Mot de passe compromis                                      └── [54] Déchiffrage de fichier python
 
-{Fore.MAGENTA}[2] 🛡 Pentest
-    {Fore.YELLOW}├── [21]  
-    ├── [22] DirBuster
-    ├── [23] Générateur de fausse page HTML
+
+{Fore.MAGENTA}[2] 🛡 Pentest                                                           {Fore.MAGENTA}[6] ⚙️ Paramètres
+    {Fore.YELLOW}├── [21]                                                             ├── [61] Mode sombre / clair
+    ├── [22] DirBuster                                                   ├── [62] Choix de langue (FR/EN)
+    ├── [23] Générateur de fausse page HTML                              └── [63] Quitter
     ├── [24] Keylogger
     ├── [25] Quizz sécurité
     └── [26] Scanner de sites web
 
 
-{Fore.MAGENTA}[3] 📊 Réseau
-    {Fore.YELLOW}├── [31] Ping IP
-    ├── [32] Scan Réseau 
-    ├── [33] Journal / Logs
-    ├── [34] Quizz réseau
+{Fore.MAGENTA}[3] 📊 Réseau                                                           {Fore.MAGENTA}[7] ⚖️ Aide & Légalité
+    {Fore.YELLOW}├── [31] Ping IP                                                     ├── [71] Documentation utilisateur
+    ├── [32] Scan Réseau                                                 ├── [72] FAQ
+    ├── [33] Journal / Logs                                              ├── [73] Mentions légales
+    ├── [34] Quizz réseau                                                └── [74] Informations RGPD
     ├── [35] Info sur l'IP
     └── [36] Speedtest Internet
+
 
 {Fore.MAGENTA} [4] PC
     {Fore.YELLOW}├── [41] Informations système
@@ -85,101 +86,67 @@ def afficher_menuFR():
     ├── [44] Mot de passe stocké (à venir)
     └── [45] Création de faux fichier
 
-{Fore.MAGENTA} [5] Autres
-    {Fore.YELLOW}├── [51] Recherche d'utilisateur
-    ├── [52] Gestionnaire de mot de passe
-    ├── [53] Chiffrage de fichier python
-    ├── [54] Déchiffrage de fichier python
-    └── [55] Console
-    
 
-{Fore.MAGENTA}[5] ⚙️ Paramètres
-    {Fore.YELLOW}├── [61] Mode sombre / clair
-    ├── [62] Choix de langue (FR/EN)
-    └── [63] Quitter
-
-{Fore.MAGENTA}[7] ⚖️ Aide & Légalité
-    {Fore.YELLOW}├── [71] Documentation utilisateur
-    ├── [72] FAQ
-    ├── [73] Mentions légales
-    └── [74] Informations RGPD
-═══════════════════════════════════════════════════════════════════════
 {Style.RESET_ALL}""")
 
 # Menu en anglais
 def afficher_menuEN():
     clear()
     print(f"""{Fore.CYAN}{Style.BRIGHT}
-═══════════════════════════════════════════════════════════════════════
-{Fore.GREEN}
-             @                                                                                                                  
-          @@@@@@                                                                                                                
-        @@@@@@@                                                                                                                 
-     @@@@@@@@   @@                @@@@           @@@@@       @@@@@@@@@@     @@@@@@@@                                                          
-  @@@@@@@@   @@@@@@@           @@@@@@@@@@@    @@@@   @@@@    @@@    @@@   @@@    @@@                                             
-  @@@@@@@@@@@@@@@@            @@@            @@@       @@@   @@@    @@@   @@@    @@@                                            
-    @@@@@@@@@@@@   @@@@@      @@@           @@@         @@@  @@@@@@@@@    @@@@@@@@@                                             
-      @@@@@@@@   @@@@@@@@     @@@            @@@       @@@   @@@   @@@    @@@                                                   
-       @@@@@@@@@@@@@@@         @@@@@@@@@@@    @@@@   @@@@    @@@    @@@   @@@                                                   
-         @@@@@@@@@@                @@@@          @@@@@       @@@    @@@@  @@@                                                   
-           @@@@@@                                                                                                               
-            @@               @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@        
-
-{Fore.CYAN}═══════════════════════════════════════════════════════════════════════
-
+                                 ═══════════════════════════════════════════════════════════════════════
+                                 {Fore.GREEN}
+                                              @                                                                                                                  
+                                           @@@@@@                                                                                                               
+                                         @@@@@@@                                                                                                                
+                                      @@@@@@@@   @@                @@@@           @@@@@       @@@@@@@@@@     @@@@@@@@                                                         
+                                   @@@@@@@@   @@@@@@@           @@@@@@@@@@@    @@@@   @@@@    @@@    @@@   @@@    @@@                                            
+                                   @@@@@@@@@@@@@@@@            @@@            @@@       @@@   @@@    @@@   @@@    @@@                                           
+                                     @@@@@@@@@@@@   @@@@@      @@@           @@@         @@@  @@@@@@@@@    @@@@@@@@@                                            
+                                       @@@@@@@@   @@@@@@@@     @@@            @@@       @@@   @@@   @@@    @@@                                                  
+                                        @@@@@@@@@@@@@@@         @@@@@@@@@@@    @@@@   @@@@    @@@    @@@   @@@                                                  
+                                          @@@@@@@@@@                @@@@          @@@@@       @@@    @@@@  @@@                                                 
+                                            @@@@@@                                                                                                               
+                                             @@               @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@        
+                                 {Fore.CYAN}═══════════════════════════════════════════════════════════════════════
 
 {Fore.GREEN}
-            Check out our Password Manager !!!!
-            http://linganguliguli.worldlite.fr/
+                                                    Check out our Password Manager !!!!
+                                                    http://linganguliguli.worldlite.fr/
 
 
-{Fore.MAGENTA}[1] 🔐 Password
-    {Fore.YELLOW}├── [11] Password Generator
-    ├── [12] Password Checker
-    ├── [13] Password Quiz
-    └── [14] Compromised Passwords
+{Fore.MAGENTA}[1] 🔐 Password                                                         {Fore.MAGENTA}[5] 🧩 Others
+    {Fore.YELLOW}├── [11] Password Generator                                          ├── [51] Username Search
+    ├── [12] Password Checker                                            ├── [52] Password Manager
+    ├── [13] Password Quiz                                               ├── [53] Python File Encryption
+    └── [14] Compromised Passwords                                       └── [54] Python File Decryption
 
-{Fore.MAGENTA}[2] 🛡 Pentest
-    {Fore.YELLOW}├── [21] Virus (disabled for ethical reasons)
-    ├── [22] DDoS Tool (disabled for ethical reasons)
-    ├── [23] Fake HTML Page Generator
+
+{Fore.MAGENTA}[2] 🛡 Pentest                                                           {Fore.MAGENTA}[6] ⚙️ Settings
+    {Fore.YELLOW}├── [21]                                                             ├── [61] Dark / Light Mode
+    ├── [22] DirBuster                                                   ├── [62] Language Choice (FR/EN)
+    ├── [23] Fake HTML Page Generator                                    └── [63] Exit
     ├── [24] Keylogger
     ├── [25] Security Quiz
-    ├── [26] Website Scanner
-    └── [27] DirBuster
+    └── [26] Website Scanner
 
-{Fore.MAGENTA}[3] 📊 Network
-    {Fore.YELLOW}├── [31] Ping IP
-    ├── [32] Scan Network 
-    ├── [33] Logs
-    ├── [34] Network Quiz
+
+{Fore.MAGENTA}[3] 📊 Network                                                           {Fore.MAGENTA}[7] ⚖️ Help & Legal
+    {Fore.YELLOW}├── [31] Ping IP                                                     ├── [71] User Documentation
+    ├── [32] Scan Network                                                ├── [72] FAQ
+    ├── [33] Logs                                                        ├── [73] Legal Notice
+    ├── [34] Network Quiz                                                └── [74] GDPR Information
     ├── [35] IP Lookup
     └── [36] Internet Speedtest
 
-{Fore.MAGENTA} [4]    PC
+
+{Fore.MAGENTA} [4] PC
     {Fore.YELLOW}├── [41] System Information
     ├── [42] Task Manager (upcoming)
     ├── [43] Temporary File Cleaner (upcoming)
+    ├── [44] Stored Passwords (upcoming)
     └── [45] Fake File Creator
 
-{Fore.MAGENTA} [5] Others
-    {Fore.YELLOW}├── [51] Username Lookup
-    ├── [52] Password Manager
-    ├── [53] Python File Encryption
-    ├── [54] Python File Decryption
-    └── [55] Console
 
-{Fore.MAGENTA}[6] ⚙️ Settings
-    {Fore.YELLOW}├── [61] Dark / Light Mode
-    ├── [62] Language Selection (FR/EN)
-    └── [63] Quit
-
-{Fore.MAGENTA}[7] ⚖️ Help & Legal
-    {Fore.YELLOW}├── [71] User Documentation
-    ├── [72] FAQ
-    ├── [73] Legal Notice
-    └── [74] GDPR Information
-═══════════════════════════════════════════════════════════════════════
 {Style.RESET_ALL}""")
 
 # execution securisé
@@ -315,9 +282,9 @@ while True:
         print(Fore.RED + "❌ Fonction non encore implémentée. / Feature not yet implemented.")
         input(Fore.GREEN + "\nRetour... / Back...")
     
-    elif choix == 55:
-        clear()
-        lancer(console.console, "Console" if langue_actuelle == "FR" else "Console")
+    #elif choix == 55:
+    #    clear()
+    #    lancer(console.console, "Console" if langue_actuelle == "FR" else "Console")
 
     elif choix == 61:
         clear()
@@ -394,5 +361,3 @@ while True:
     else:
         print(Fore.RED + "❌ Option invalide.")
         time.sleep(1.5)
-
-
