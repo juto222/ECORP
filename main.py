@@ -55,36 +55,35 @@ def afficher_menuFR():
 
 
 {Fore.MAGENTA}[1] 🔐 Mot de passe                                                     {Fore.MAGENTA}[5] 🧩 Autres
-    {Fore.YELLOW}├── [11] Générateur de mot de passe                                  ├── [51] Recherche d'utilisateur
-    ├── [12] Vérificateur de mot de passe                                ├── [52] Gestionnaire de mot de passe
-    ├── [13] Quizz mot de passe                                          ├── [53] Chiffrage de fichier python
-    └── [14] Mot de passe compromis                                      └── [54] Déchiffrage de fichier python
+ {Fore.YELLOW}├── [11] Générateur de mot de passe                                     ├── [51] Recherche d'utilisateur
+ ├── [12] Vérificateur de mot de passe                                   ├── [52] Gestionnaire de mot de passe
+ ├── [13] Quizz mot de passe                                             ├── [53] Chiffrage de fichier python
+ └── [14] Mot de passe compromis                                         └── [54] Déchiffrage de fichier python
 
 
 {Fore.MAGENTA}[2] 🛡 Pentest                                                           {Fore.MAGENTA}[6] ⚙️ Paramètres
-    {Fore.YELLOW}├── [21]                                                             ├── [61] Mode sombre / clair
-    ├── [22] DirBuster                                                   ├── [62] Choix de langue (FR/EN)
-    ├── [23] Générateur de fausse page HTML                              └── [63] Quitter
-    ├── [24] Keylogger
-    ├── [25] Quizz sécurité
-    └── [26] Scanner de sites web
+ {Fore.YELLOW}├── [21] DirBuster                                                      ├── [61] Mode sombre / clair
+ ├── [22] Générateur de fausse page HTML                                 ├── [62] Choix de langue (FR/EN)
+ ├── [23] Keylogger                                                      └── [63] Quitter
+ ├── [24] Quizz sécurité
+ └── [25] Scanner de sites web
 
 
 {Fore.MAGENTA}[3] 📊 Réseau                                                           {Fore.MAGENTA}[7] ⚖️ Aide & Légalité
-    {Fore.YELLOW}├── [31] Ping IP                                                     ├── [71] Documentation utilisateur
-    ├── [32] Scan Réseau (en développement)                              ├── [72] FAQ
-    ├── [33] Journal / Logs                                              ├── [73] Mentions légales
-    ├── [34] Quizz réseau                                                └── [74] Informations RGPD
-    ├── [35] Info sur l'IP
-    └── [36] Speedtest Internet
+ {Fore.YELLOW}├── [31] Ping IP                                                        ├── [71] Documentation utilisateur
+ ├── [32] Scan Réseau (en développement)                                 ├── [72] FAQ
+ ├── [33] Journal / Logs                                                 ├── [73] Mentions légales
+ ├── [34] Quizz réseau                                                   └── [74] Informations RGPD
+ ├── [35] Info sur l'IP
+ └── [36] Speedtest Internet
 
 
 {Fore.MAGENTA} [4] PC
-    {Fore.YELLOW}├── [41] Informations système
-    ├── [42] Gestionnaire de tâches (à venir)
-    ├── [43] Nettoyeur de fichiers temporaires (à venir)
-    ├── [44] Mot de passe stocké (à venir)
-    └── [45] Création de faux fichier
+ {Fore.YELLOW} ├── [41] Informations système
+  ├── [42] Gestionnaire de tâches (à venir)
+  ├── [43] Nettoyeur de fichiers temporaires (à venir)
+  ├── [44] Mot de passe stocké (à venir)
+  └── [45] Création de faux fichier
 
 
 {Style.RESET_ALL}""")
@@ -115,36 +114,35 @@ def afficher_menuEN():
 
 
 {Fore.MAGENTA}[1] 🔐 Password                                                         {Fore.MAGENTA}[5] 🧩 Others
-    {Fore.YELLOW}├── [11] Password Generator                                          ├── [51] Username Search
-    ├── [12] Password Checker                                            ├── [52] Password Manager
-    ├── [13] Password Quiz                                               ├── [53] Python File Encryption
-    └── [14] Compromised Passwords                                       └── [54] Python File Decryption
+ {Fore.YELLOW}├── [11] Password Generator                                          ├── [51] Username Search
+ ├── [12] Password Checker                                            ├── [52] Password Manager
+ ├── [13] Password Quiz                                               ├── [53] Python File Encryption
+ └── [14] Compromised Passwords                                       └── [54] Python File Decryption
 
 
 {Fore.MAGENTA}[2] 🛡 Pentest                                                           {Fore.MAGENTA}[6] ⚙️ Settings
-    {Fore.YELLOW}├── [21]                                                             ├── [61] Dark / Light Mode
-    ├── [22] DirBuster                                                   ├── [62] Language Choice (FR/EN)
-    ├── [23] Fake HTML Page Generator                                    └── [63] Exit
-    ├── [24] Keylogger
-    ├── [25] Security Quiz
-    └── [26] Website Scanner
+ {Fore.YELLOW}├── [21] DirBuster                                                   ├── [61] Dark / Light Mode
+ ├── [22] Fake HTML Page Generator                                    ├── [62] Language Choice (FR/EN)
+ ├── [23] Keylogger                                                   └── [63] Exit
+ ├── [24] Security Quiz
+ └── [25] Website Scanner 
 
 
 {Fore.MAGENTA}[3] 📊 Network                                                           {Fore.MAGENTA}[7] ⚖️ Help & Legal
-    {Fore.YELLOW}├── [31] Ping IP                                                     ├── [71] User Documentation
-    ├── [32] Scan Network (in development)                               ├── [72] FAQ
-    ├── [33] Logs                                                        ├── [73] Legal Notice
-    ├── [34] Network Quiz                                                └── [74] GDPR Information
-    ├── [35] IP Lookup
-    └── [36] Internet Speedtest
+ {Fore.YELLOW}├── [31] Ping IP                                                     ├── [71] User Documentation
+ ├── [32] Scan Network (in development)                               ├── [72] FAQ
+ ├── [33] Logs                                                        ├── [73] Legal Notice
+ ├── [34] Network Quiz                                                └── [74] GDPR Information
+ ├── [35] IP Lookup
+ └── [36] Internet Speedtest
 
 
 {Fore.MAGENTA} [4] PC
-    {Fore.YELLOW}├── [41] System Information
-    ├── [42] Task Manager (upcoming)
-    ├── [43] Temporary File Cleaner (upcoming)
-    ├── [44] Stored Passwords (upcoming)
-    └── [45] Fake File Creator
+ {Fore.YELLOW} ├── [41] System Information
+  ├── [42] Task Manager (upcoming)
+  ├── [43] Temporary File Cleaner (upcoming)
+  ├── [44] Stored Passwords (upcoming)
+  └── [45] Fake File Creator
 
 
 {Style.RESET_ALL}""")
@@ -173,7 +171,10 @@ while True:
         afficher_menuFR()
 
     try:
-        choix = int(input(Fore.CYAN + "Entrez votre choix / Enter your choice: "))
+        if langue_actuelle == "FR":
+            choix = int(input(Fore.CYAN + "Entrez votre choix : "))
+        else:
+            choix = int(input(Fore.CYAN + "Enter your choice: "))
     except ValueError:
         print(Fore.RED + "❌ Veuillez entrer un numéro valide.")
         time.sleep(1.5)
@@ -199,23 +200,18 @@ while True:
 
     elif choix == 21:
         clear()
-        print(Fore.RED + "❌ Fonction désactivée. / Feature disabled.")
-        input(Fore.GREEN + "\nRetour... / Back...")
+        lancer(dirbuster.dirbuster, "Dirbuster" if langue_actuelle == "FR" else "Dirbuster")
 
     elif choix == 22:
-            clear()
-            lancer(dirbuster.dirbuster, "Dirbuster" if langue_actuelle == "FR" else "Dirbuster")
-
-    elif choix == 23:
         clear()
         lancer(lambda: phishing.afficher_menu_phishing(langue_actuelle),
        "Générateur de fausse page HTML" if langue_actuelle == "FR" else "Fake HTML Page Generator")
         
-    elif choix == 24:
+    elif choix == 23:
         clear()
         lancer(keylog.key, "Keylogger" if langue_actuelle == "FR" else "Keylogger")
 
-    elif choix == 25:
+    elif choix == 24:
         clear()
         if langue_actuelle == "FR":
             level = input("Choisissez le niveau de difficulté (1-Facile, 2-Moyen, 3-Difficile) : ")
@@ -223,9 +219,9 @@ while True:
             level = input("Choose difficulty level (1-Easy, 2-Medium, 3-Hard): ")
         lancer(lambda: quizzsecurity.quizzsecurity(level), "Quizz sécurité" if langue_actuelle == "FR" else "Security Quiz")
 
-    elif choix == 26:
+    elif choix == 25:
         clear()
-        lancer(subdomain.sousdomaine, "Sous domaine" if langue_actuelle == "FR" else "Subdomain")
+        lancer(subdomain.sousdomaine, "Scanner de sites web" if langue_actuelle == "FR" else "Website Scanner")
 
     
 
