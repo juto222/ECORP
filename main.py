@@ -33,7 +33,7 @@ def clear():
 def afficher_menuFR():
     clear()
     print(f"""{Fore.CYAN}{Style.BRIGHT}
-                                 ═══════════════════════════════════════════════════════════════════════
+                                            ════════════════════════════════════════════════════════════════════════
                                  {Fore.GREEN}
                                               @                                                                                                                  
                                            @@@@@@                                                                                                               
@@ -92,7 +92,7 @@ def afficher_menuFR():
 def afficher_menuEN():
     clear()
     print(f"""{Fore.CYAN}{Style.BRIGHT}
-                                 ═══════════════════════════════════════════════════════════════════════
+                                            ═══════════════════════════════════════════════════════════════════════
                                  {Fore.GREEN}
                                               @                                                                                                                  
                                            @@@@@@                                                                                                               
@@ -357,3 +357,5 @@ while True:
     else:
         print(Fore.RED + "❌ Option invalide.")
         time.sleep(1.5)
+
+
