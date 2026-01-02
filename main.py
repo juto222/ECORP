@@ -1,3 +1,4 @@
+
 import os
 import time
 import webbrowser
@@ -357,5 +358,6 @@ while True:
     else:
         print(Fore.RED + "❌ Option invalide.")
         time.sleep(1.5)
+
 
 
