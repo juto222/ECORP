@@ -1,4 +1,3 @@
-
 import os
 import time
 import webbrowser
@@ -13,6 +12,7 @@ from Option import quizznetwork
 from Option import keylog
 #from Option import console
 from Option import pswd
+from Option import keylog
 from Option import quizzmdp
 from Option import quizzsecurity
 from Option import username
@@ -63,7 +63,7 @@ def afficher_menuFR():
 
 
 {Fore.MAGENTA}[2] 🛡 Pentest                                                           {Fore.MAGENTA}[6] ⚙️ Paramètres
- {Fore.YELLOW}├── [21] DirBuster                                                      ├── [61] Mode sombre / clair
+ {Fore.YELLOW}├── [21] DirBuster                                                       ├── [61] Mode sombre / clair
  ├── [22] Générateur de fausse page HTML                                 ├── [62] Choix de langue (FR/EN)
  ├── [23] Keylogger                                                      └── [63] Quitter
  ├── [24] Quizz sécurité
@@ -71,7 +71,7 @@ def afficher_menuFR():
 
 
 {Fore.MAGENTA}[3] 📊 Réseau                                                           {Fore.MAGENTA}[7] ⚖️ Aide & Légalité
- {Fore.YELLOW}├── [31] Ping IP                                                        ├── [71] Documentation utilisateur
+ {Fore.YELLOW}├── [31] Ping IP                                                         ├── [71] Documentation utilisateur
  ├── [32] Scan Réseau (en développement)                                 ├── [72] FAQ
  ├── [33] Journal / Logs                                                 ├── [73] Mentions légales
  ├── [34] Quizz réseau                                                   └── [74] Informations RGPD
@@ -193,11 +193,7 @@ while True:
 
     elif choix == 13:
         clear()
-        if langue_actuelle == "FR":
-            level = input("Choisissez le niveau de difficulté (1-Facile, 2-Moyen, 3-Difficile) : ")
-        else:
-            level = input("Choose difficulty level (1-Easy, 2-Medium, 3-Hard): ")
-        lancer(lambda: quizzmdp.quizz_mdp(level), "Quizz mot de passe" if langue_actuelle == "FR" else "Password Quiz")
+        lancer(lambda: quizzmdp.quizz_mdp(langue_actuelle), "Quizz mot de passe" if langue_actuelle == "FR" else "Password Quiz")
 
     elif choix == 21:
         clear()
@@ -358,6 +354,3 @@ while True:
     else:
         print(Fore.RED + "❌ Option invalide.")
         time.sleep(1.5)
-
-
-
