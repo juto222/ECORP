@@ -1,6 +1,19 @@
+import webbrowser
 import os
 import time
-import webbrowser
+if not os.path.exists(r"\AppData\Local\Programs\Python\Python311"):
+    print("Python n'est pas installé. Veuillez installer Python 3.11 pour exécuter ce programme.")
+    time.sleep(1)
+    reponse = input("Voulez vous quand même continuer sans l'option du .msi dans le keylogger ? (O/N)")
+    if reponse.upper() == "O":
+        pass
+        
+    else:
+        webbrowser.open("https://www.python.org/ftp/python/3.11.9/python-3.11.9-amd64.exe")
+        print("Fermeture du programme...")
+        exit()
+    
+    
 from colorama import init, Fore, Style
 from Option import PingIP
 from Option import CheckMDP
@@ -354,3 +367,5 @@ while True:
     else:
         print(Fore.RED + "❌ Option invalide.")
         time.sleep(1.5)
+
+
