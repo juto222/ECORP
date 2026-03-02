@@ -44,4 +44,3 @@ def verifier():
             f"\n"
         )
 
-

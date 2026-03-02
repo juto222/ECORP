@@ -87,4 +87,3 @@ def dirbuster():
         print(f"Nombre de site sous domaine trouvé {found}")
 
     input("\nAppuyez sur Entrée pour revenir au menu.")
-
