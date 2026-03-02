@@ -1,19 +1,21 @@
-import webbrowser
+import sys
 import os
+import webbrowser
 import time
-if not os.path.exists(r"\AppData\Local\Programs\Python\Python311"):
-    print("Python n'est pas installé. Veuillez installer Python 3.11 pour exécuter ce programme.")
-    time.sleep(1)
-    reponse = input("Voulez vous quand même continuer sans l'option du .msi dans le keylogger ? (O/N)")
-    if reponse.upper() == "O":
-        pass
-        
+
+# Vérification de la version Python requise (3.11)
+required_version = (3, 11)
+if sys.version_info[:2] != required_version:
+    print(f"Python {required_version[0]}.{required_version[1]} requis. Vous utilisez Python {sys.version_info.major}.{sys.version_info.minor}.")
+    rep = input("Voulez-vous continuer quand même sans cx_Freeze ? (y/N) : ").strip().lower()
+    if rep not in ("y", "yes"):
+        print("Veuillez installer Python 3.11. Ouverture de la page de téléchargement...")
+        webbrowser.open("https://www.python.org/downloads/release/python-3110/")
+        sys.exit(1)
     else:
-        webbrowser.open("https://www.python.org/ftp/python/3.11.9/python-3.11.9-amd64.exe")
-        print("Fermeture du programme...")
-        exit()
-    
-    
+        os.environ['SKIP_CX_FREEZE'] = '1'
+        print("Continuer sans cx_Freeze. Certaines fonctionnalités liées à la création d'exécutables seront désactivées.")
+
 from colorama import init, Fore, Style
 from Option import PingIP
 from Option import CheckMDP
@@ -367,5 +369,4 @@ while True:
     else:
         print(Fore.RED + "❌ Option invalide.")
         time.sleep(1.5)
-
 
